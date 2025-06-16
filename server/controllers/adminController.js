@@ -129,6 +129,39 @@ const addTeacher = async (req, res) => {
   }
 };
 
+// Update a student
+const updateStudent = async (req, res) => {
+  const { id } = req.params;
+  const updates = req.body;
+
+  try {
+    const updatedStudent = await Student.findByIdAndUpdate(id, updates, { new: true });
+    if (!updatedStudent) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+    res.json(updatedStudent);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating student", error: error.message });
+  }
+};
+
+
+// Update a teacher
+const updateTeacher = async (req, res) => {
+  const { id } = req.params;
+  const updates = req.body;
+
+  try {
+    const updatedTeacher = await Teacher.findByIdAndUpdate(id, updates, { new: true });
+    if (!updatedTeacher) {
+      return res.status(404).json({ message: "Teacher not found" });
+    }
+    res.json(updatedTeacher);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating teacher", error: error.message });
+  }
+};
+
 
 
 module.exports = {
@@ -139,7 +172,9 @@ module.exports = {
   deleteStudent,
   deleteTeacher,
   addStudent,
-  addTeacher
+  addTeacher,
+  updateStudent,
+  updateTeacher,  
 };
 // This code defines the adminController for handling admin-related operations in a school management system.
 // It includes functions for registering and logging in admins, as well as retrieving lists of students and teachers.

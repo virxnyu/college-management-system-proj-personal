@@ -6,6 +6,9 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import MarkAttendance from './pages/MarkAttendance';
 import ViewAttendance from './pages/ViewAttendance';
+import MyAttendancePage from "./pages/MyAttendancePage";
+import AdminDashboard from "./pages/AdminDashboard";
+import StudentTodo from './components/student/StudentTodo';
 
 function App() {
   return (
@@ -20,6 +23,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/mark-attendance"
           element={
@@ -28,12 +32,38 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route path="/view-attendance" element={<ViewAttendance />} />
 
+        <Route
+          path="/my-attendance"
+          element={
+            <ProtectedRoute role="student">
+              <MyAttendancePage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin-dashboard"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/student-todo"
+          element={
+            <ProtectedRoute role="student">
+              <StudentTodo />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
 }
 
 export default App;
-// This is the main entry point of the React application.

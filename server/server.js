@@ -28,7 +28,7 @@ app.use("/api/attendance", attendanceRoutes);
 
 app.use("/api/student", require("./routes/authRoutes"));
 
-
+app.use("/api/todos", require("./routes/todoRoutes"));
 
 
 const PORT = process.env.PORT || 5000;

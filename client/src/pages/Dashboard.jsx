@@ -2,7 +2,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import StudentDashboard from "../components/student/StudentDashboard";
 import TeacherDashboard from "../components/teacher/TeacherDashboard";
-import AdminDashboard from "../components/admin/AdminDashboard";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -31,7 +30,18 @@ function Dashboard() {
       dashboardContent = <TeacherDashboard />;
       break;
     case "admin":
-      dashboardContent = <AdminDashboard />;
+      dashboardContent = (
+        <div>
+          <h2>👩‍💼 Admin Dashboard</h2>
+          <p>Welcome, admin! Here's your dashboard.</p>
+
+          <button onClick={() => navigate("/admin-dashboard")}>
+            ⚙️ Manage Users (Add/Delete/View)
+          </button>
+
+          {/* You can add more navigation buttons here later */}
+        </div>
+      );
       break;
     default:
       dashboardContent = <p>❌ Unknown role: {role}</p>;
@@ -40,7 +50,8 @@ function Dashboard() {
   return (
     <div>
       {dashboardContent}
-      <button onClick={handleLogout}>Logout</button>
+      <br />
+      <button onClick={handleLogout}>🚪 Logout</button>
     </div>
   );
 }
