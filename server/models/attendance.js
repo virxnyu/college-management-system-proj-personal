@@ -6,6 +6,11 @@ const attendanceSchema = new mongoose.Schema({
     ref: "Student",
     required: true
   },
+  subject: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Subject",
+    required: true
+  },
   date: {
     type: Date,
     required: true
@@ -23,6 +28,8 @@ const attendanceSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Attendance", attendanceSchema);
+
+
 // This model defines the structure for attendance records, linking students and teachers.
 // It includes fields for the student ID, date of attendance, status (Present, Absent, Late),
 // and the teacher who marked the attendance.

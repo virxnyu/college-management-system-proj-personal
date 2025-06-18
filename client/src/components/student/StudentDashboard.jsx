@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../axios";
 import { Link } from "react-router-dom";
-
-import { useNavigate } from "react-router-dom";
-
+import DashboardNavbar from "../common/DashboardNavbar";
 
 const StudentDashboard = () => {
   const [attendance, setAttendance] = useState([]);
   const [marks, setMarks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-
-  const goToTodo = () => {
-  navigate("/student-todo");
-};
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,43 +40,28 @@ const StudentDashboard = () => {
   if (loading) return <p>⏳ Loading student dashboard...</p>;
 
   return (
-    <div>
-      <h2>🎓 Welcome to Student Dashboard</h2>
-
-      
-      <h3>📅 Attendance</h3>
-      <Link to="/my-attendance">📘 View My Attendance</Link>
-      
-      <ul>
-        {attendance.map((entry, idx) => (
-          <li key={idx}>
-            {entry.date} - {entry.status}
-          </li>
-        ))}
-      </ul>
-
-      <h3>📊 Marks</h3>
+  <div>
+    <DashboardNavbar role="student" />
+    <div className="dashboard-body">
+      <h2>📊 Marks</h2>
       <ul>
         {marks.map((subject, idx) => (
-          <li key={idx}>
-            {subject.subject}: {subject.score}
-          </li>
+          <li key={idx}>{subject.subject}: {subject.score}</li>
         ))}
       </ul>
 
-      
-      <button onClick={goToTodo}>📝 Go to My To-Do List</button>
+      <h3>📅 Attendance</h3>
+      <Link to="/my-attendance">📘 View My Attendance</Link>
       <br />
+<Link to="/student/subject-attendance">📘 View Subject-wise Attendance</Link>
+      <ul>
+        {attendance.map((entry, idx) => (
+          <li key={idx}>{entry.date} - {entry.status}</li>
+        ))}
+      </ul>
     </div>
-    
-    
-
-    
-
-  );
-  
-
-  
+  </div>
+);
 };
 
 export default StudentDashboard;

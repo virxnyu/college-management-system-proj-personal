@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./Login.css"; // ✅ Import the scoped CSS
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -36,32 +37,31 @@ function LoginPage() {
   };
 
   return (
-    <div className="App">
-      <h2>Login Portal</h2>
-      <form onSubmit={handleLogin}>
+    <div className="login-page">
+      <form className="login-form" onSubmit={handleLogin}>
+        <h2>Login Portal</h2>
         <select value={role} onChange={(e) => setRole(e.target.value)}>
           <option value="student">Student</option>
           <option value="teacher">Teacher</option>
           <option value="admin">Admin</option>
         </select>
-        <br />
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-        /><br />
+        />
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-        /><br />
+        />
         <button type="submit">Login</button>
+        {message && <p>{message}</p>}
       </form>
-      {message && <p>{message}</p>}
     </div>
   );
 }

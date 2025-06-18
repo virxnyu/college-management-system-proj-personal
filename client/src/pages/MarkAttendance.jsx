@@ -6,6 +6,9 @@ function MarkAttendance() {
   const [date, setDate] = useState('');
   const [status, setStatus] = useState('Present');
   const [students, setStudents] = useState([]);
+  const [subjectId, setSubjectId] = useState('');
+  const [subjects, setSubjects] = useState([]); // <-- add this
+
 
   const token = localStorage.getItem('token'); // JWT stored during login
 
@@ -27,11 +30,29 @@ function MarkAttendance() {
   fetchStudents();
 }, [token]);
 
+useEffect(() => {
+  // ...existing fetchStudents...
+  const fetchSubjects = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/subjects/teacher", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setSubjects(res.data);
+    } catch (err) {
+      console.error("Failed to fetch subjects", err);
+    }
+  };
+  fetchSubjects(); // <-- add this
+}, [token]);
+
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:5000/api/teacher/attendance', {
   studentId,
+  subjectId,
   date,
   status
 }, {
@@ -39,7 +60,6 @@ function MarkAttendance() {
     Authorization: `Bearer ${token}`
   }
 });
-
       console.log(res.data); // <-- Use the res object here
       alert('✅ Attendance marked!');
     } catch (err) {
@@ -60,6 +80,16 @@ function MarkAttendance() {
                 </option>
             ))}
         </select><br />
+
+        <select value={subjectId} onChange={(e) => setSubjectId(e.target.value)} required>
+  <option value="">--Select Subject--</option>
+  {subjects.map((subject) => (
+    <option key={subject._id} value={subject._id}>
+      {subject.name}
+    </option>
+  ))}
+</select>
+        <br />
 
         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required /><br />
 

@@ -1,13 +1,111 @@
+/* index.css */
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+  background: linear-gradient(to right, #292364, #79787b, #77b085);
+  color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+h1 {
+  font-family: 'Georgia', serif;
+  font-size: 2.8rem;
+  color: #f9f871;
+  text-shadow: 0 0 10px #f9f87180;
+  margin-bottom: 20px;
 }
+
+.todo-container {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 30px 25px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+input[type="text"] {
+  padding: 12px;
+  width: 70%;
+  margin-right: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #ffffff20;
+  color: #ffffff;
+  backdrop-filter: blur(4px);
+}
+
+input[type="text"]::placeholder {
+  color: #cccccc;
+}
+
+button {
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background-color: #f9f871;
+  color: #000;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #fff500;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(255, 255, 0, 0.4);
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 12px 0;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+}
+
+li input[type="checkbox"] {
+  margin-right: 12px;
+  transform: scale(1.2);
+}
+
+li span {
+  flex-grow: 1;
+  font-size: 1.1rem;
+  color: #e0e0e0;
+}
+
+li.completed span {
+  text-decoration: line-through;
+  color: #888;
+}
+
+li button {
+  margin-left: 8px;
+  background-color: transparent;
+  color: #f9f871;
+  font-size: 1.2rem;
+}
+
+li button:hover {
+  color: #fff500;
+  transform: scale(1.1);
+}
+
+

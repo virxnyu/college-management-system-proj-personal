@@ -9,6 +9,8 @@ import ViewAttendance from './pages/ViewAttendance';
 import MyAttendancePage from "./pages/MyAttendancePage";
 import AdminDashboard from "./pages/AdminDashboard";
 import StudentTodo from './components/student/StudentTodo';
+import './index.css';
+import StudentSubjectAttendance from "./components/student/StudentSubjectAttendance";
 
 function App() {
   return (
@@ -61,6 +63,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+  path="/student/subject-attendance"
+  element={
+    <ProtectedRoute role="student">
+      <StudentSubjectAttendance />
+    </ProtectedRoute>
+  }
+/>
       </Routes>
     </Router>
   );

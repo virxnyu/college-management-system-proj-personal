@@ -10,6 +10,7 @@ dotenv.config();
 const teacherRoutes = require("./routes/teacherRoutes");
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const subjectRoutes = require("./routes/subjectRoutes");
 
 const app = express();
 app.use(cors());
@@ -26,9 +27,9 @@ app.use("/api/admin", adminRoutes);
 
 app.use("/api/attendance", attendanceRoutes);
 
-app.use("/api/student", require("./routes/authRoutes"));
-
 app.use("/api/todos", require("./routes/todoRoutes"));
+
+app.use("/api/subjects", subjectRoutes);
 
 
 const PORT = process.env.PORT || 5000;
