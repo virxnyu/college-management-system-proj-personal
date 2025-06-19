@@ -22,4 +22,14 @@ router.get("/teacher", verifyToken, requireRole("teacher"), getSubjectsByTeacher
 // 📌 Student: view enrolled subjects
 router.get("/student", verifyToken, requireRole("student"), getSubjectsByStudent);
 
+// 📌 Get all subjects (for students to enroll)
+router.get("/", require("../controllers/subjectController").getAllSubjects);
+
+router.get(
+  "/:subjectId/students",
+  verifyToken,
+  requireRole("teacher"),
+  require("../controllers/subjectController").getStudentsBySubject
+);
+
 module.exports = router;

@@ -17,10 +17,10 @@ exports.createSubject = async (req, res) => {
   }
 };
 
-// ✅ Student enrolls in a subject
 exports.enrollStudent = async (req, res) => {
   try {
     const subject = await Subject.findById(req.body.subjectId);
+    console.log("Fetched subject:", subject); // <-- Debug log
     if (!subject) return res.status(404).json({ message: "Subject not found" });
 
     const studentId = req.user.id;
@@ -58,3 +58,24 @@ exports.getSubjectsByStudent = async (req, res) => {
     res.status(500).json({ message: "Error fetching subjects" });
   }
 };
+
+exports.getStudentsBySubject = async (req, res) => {
+  try {
+    const subject = await Subject.findById(req.params.subjectId).populate("students", "name email _id");
+    if (!subject) return res.status(404).json({ message: "Subject not found" });
+    res.json(subject.students);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching students for subject" });
+  }
+};
+
+// ✅ Get all subjects (for student enrollment dropdown)
+exports.getAllSubjects = async (req, res) => {
+  try {
+    const subjects = await Subject.find({});
+    res.json(subjects);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching all subjects" });
+  }
+};
+

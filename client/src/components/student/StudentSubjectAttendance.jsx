@@ -53,6 +53,8 @@ export default function StudentSubjectAttendance() {
     fetchAttendanceStats();
   }, [selectedSubjectId]);
 
+  
+
   return (
     <div>
       <h2>📚 Subject-wise Attendance</h2>
@@ -78,12 +80,17 @@ export default function StudentSubjectAttendance() {
           {loadingAttendance && <p>⏳ Fetching attendance...</p>}
 
           {attendanceStats && (
-            <div style={{ marginTop: "20px" }}>
-              <p><strong>Total Classes:</strong> {attendanceStats.total}</p>
-              <p><strong>Classes Attended:</strong> {attendanceStats.attended}</p>
-              <p><strong>Attendance %:</strong> {attendanceStats.percentage}%</p>
-            </div>
-          )}
+  <div style={{ marginTop: "20px" }}>
+    <p><strong>Total Classes:</strong> {attendanceStats.total}</p>
+    <p><strong>Classes Attended:</strong> {attendanceStats.attended}</p>
+    <p><strong>Attendance %:</strong> {attendanceStats.percentage}%</p>
+    {attendanceStats.percentage < 75 && (
+      <p style={{ color: "goldenrod", fontWeight: "bold" }}>
+        ⚠️ Warning: Your attendance is below 75%!
+      </p>
+    )}
+  </div>
+)}
         </>
       )}
     </div>
