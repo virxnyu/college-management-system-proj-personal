@@ -1,0 +1,109 @@
+/* client/src/components/common/Notifications.css */
+
+.notifications-container {
+    position: relative;
+}
+
+.notification-bell {
+    background: none;
+    border: none;
+    font-size: 1.75rem; /* Makes the bell icon larger */
+    cursor: pointer;
+    position: relative;
+    padding: 0;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background-color: var(--accent-danger);
+    color: white;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid var(--background-secondary);
+}
+
+.notifications-dropdown {
+    position: absolute;
+    top: 140%;
+    right: 0;
+    width: 380px;
+    background-color: var(--background-secondary);
+    border-radius: 12px;
+    border: 1px solid var(--background-tertiary);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.dropdown-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--background-tertiary);
+}
+
+.dropdown-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.mark-all-read-btn {
+    background: none;
+    border: none;
+    color: var(--accent-primary);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 0;
+}
+
+.dropdown-body {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--background-tertiary);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-item:hover {
+    background-color: var(--background-tertiary);
+}
+
+.notification-item.unread {
+    background-color: rgba(49, 130, 206, 0.1);
+}
+
+.notification-item p {
+    margin: 0 0 0.25rem 0;
+    color: var(--text-primary);
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.notification-item small {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.no-notifications {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+}

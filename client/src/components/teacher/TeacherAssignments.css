@@ -1,0 +1,70 @@
+/* client/src/components/teacher/TeacherAssignments.css */
+
+.teacher-assignments-container {
+    background-color: #1e1e1e;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid #2d3748;
+    margin-top: 2rem;
+}
+
+.teacher-assignments-container h3 {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #f7fafc;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.assignments-table-wrapper {
+    overflow-x: auto;
+}
+
+.assignments-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.assignments-table th,
+.assignments-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #2d3748;
+    color: #cbd5e0;
+    white-space: nowrap;
+}
+
+.assignments-table th {
+    background-color: #2d3748;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #a0aec0;
+}
+
+.assignments-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.assignments-table tbody tr:hover {
+    background-color: #2b3442;
+}
+
+.view-submissions-link {
+    display: inline-block;
+    background-color: #3182ce;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+
+.view-submissions-link:hover {
+    background-color: #2b6cb0;
+}

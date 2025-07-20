@@ -1,170 +1,122 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import axios from '../axios';
+import './ViewAttendance.css';
 
-function ViewAttendance() {
-  const [records, setRecords] = useState([]);
-  const [filteredRecords, setFilteredRecords] = useState([]);
-  const [filterName, setFilterName] = useState("");
-  const [filterDate, setFilterDate] = useState("");
+const ViewAttendance = () => {
+    const [subjects, setSubjects] = useState([]);
+    const [report, setReport] = useState([]);
+    
+    const [selectedSubject, setSelectedSubject] = useState('');
+    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
+    
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [subjectName, setSubjectName] = useState('');
 
-  const [sortField, setSortField] = useState("");
-  const [sortOrder, setSortOrder] = useState("asc");
+    useEffect(() => {
+        const fetchSubjects = async () => {
+            try {
+                const res = await axios.get("/subjects/teacher");
+                setSubjects(res.data);
+            } catch (err) {
+                setError("Could not fetch your subjects.");
+            }
+        };
+        fetchSubjects();
+    }, []);
 
-  const token = localStorage.getItem("token");
-
-  useEffect(() => {
-    const fetchRecords = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/api/teacher/class-attendance", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setRecords(res.data);
-      } catch (err) {
-        console.error("Error fetching attendance", err);
-      }
-    };
-
-    fetchRecords();
-  }, [token]);
-
-  // 🔍 Filter + Sort logic
-  useEffect(() => {
-    let filtered = records;
-
-    if (filterName) {
-      filtered = filtered.filter((rec) =>
-        rec.student?.name?.toLowerCase().includes(filterName.toLowerCase())
-      );
-    }
-
-    if (filterDate) {
-      filtered = filtered.filter(
-        (rec) =>
-          new Date(rec.date).toISOString().slice(0, 10) === filterDate
-      );
-    }
-
-    // ✅ Sorting logic
-    if (sortField) {
-      filtered = [...filtered].sort((a, b) => {
-        let valA, valB;
-
-        if (sortField === "student.name") {
-          valA = a.student?.name || "";
-          valB = b.student?.name || "";
-        } else if (sortField === "date") {
-          valA = new Date(a.date);
-          valB = new Date(b.date);
-        } else {
-          valA = a[sortField] || "";
-          valB = b[sortField] || "";
+    useEffect(() => {
+        if (!selectedSubject || !selectedDate) {
+            setReport([]);
+            return;
         }
+        const fetchReport = async () => {
+            setLoading(true);
+            setError('');
+            const subject = subjects.find(s => s._id === selectedSubject);
+            if (subject) setSubjectName(subject.name);
 
-        if (sortField === "date") {
-          return sortOrder === "asc" ? valA - valB : valB - valA;
-        }
+            try {
+                // --- CALL THE NEW ENDPOINT ---
+                const res = await axios.get(`/attendance/teacher/comprehensive-report`, {
+                    params: { subjectId: selectedSubject, date: selectedDate }
+                });
+                setReport(res.data);
+            } catch (err) {
+                setError("Could not fetch the report for this day.");
+                setReport([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchReport();
+    }, [selectedSubject, selectedDate, subjects]);
 
-        return sortOrder === "asc"
-          ? valA.localeCompare(valB)
-          : valB.localeCompare(valA);
-      });
-    }
+    return (
+        <div className="view-attendance-container">
+            <h1>Comprehensive Attendance Report</h1>
+            <div className="controls-container">
+                <div className="control-group">
+                    <label htmlFor="date-select">Select Date:</label>
+                    <input 
+                        id="date-select"
+                        type="date" 
+                        value={selectedDate} 
+                        onChange={e => setSelectedDate(e.target.value)} 
+                    />
+                </div>
+                <div className="control-group">
+                    <label htmlFor="subject-select">Select Subject:</label>
+                    <select id="subject-select" value={selectedSubject} onChange={e => setSelectedSubject(e.target.value)}>
+                        <option value="">-- Choose a Subject --</option>
+                        {subjects.map(s => <option key={s._id} value={s._id}>{s.name}</option>)}
+                    </select>
+                </div>
+            </div>
 
-    setFilteredRecords(filtered);
-  }, [filterName, filterDate, records, sortField, sortOrder]);
-
-  return (
-    <div>
-      <h2>📅 Attendance Records</h2>
-
-      {/* 🔍 Filters */}
-      <input
-        type="text"
-        placeholder="🔎 Filter by student name"
-        value={filterName}
-        onChange={(e) => setFilterName(e.target.value)}
-      />
-      <input
-        type="date"
-        value={filterDate}
-        onChange={(e) => setFilterDate(e.target.value)}
-      />
-      <button
-        onClick={() => {
-          setFilterName("");
-          setFilterDate("");
-        }}
-      >
-        ❌ Clear Filters
-      </button>
-
-      {/* 🔽 Sort Buttons */}
-      <div style={{ marginTop: "20px" }}>
-        <button
-          onClick={() => {
-            setSortField("student.name");
-            setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-          }}
-        >
-          Sort by Name {sortField === "student.name" && (sortOrder === "asc" ? "🔼" : "🔽")}
-        </button>
-
-        <button
-          onClick={() => {
-            setSortField("date");
-            setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-          }}
-        >
-          Sort by Date {sortField === "date" && (sortOrder === "asc" ? "🔼" : "🔽")}
-        </button>
-
-        <button
-          onClick={() => {
-            setSortField("status");
-            setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-          }}
-        >
-          Sort by Status {sortField === "status" && (sortOrder === "asc" ? "🔼" : "🔽")}
-        </button>
-      </div>
-
-      {/* 📋 Table */}
-      <table border="1" style={{ marginTop: "20px" }}>
-        <thead>
-          <tr>
-            <th>Student</th>
-            <th>Email</th>
-            <th>Date</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredRecords.length === 0 ? (
-            <tr>
-              <td colSpan="4">No records found</td>
-            </tr>
-          ) : (
-            filteredRecords.map((rec) => (
-              <tr key={rec._id}>
-                <td>{rec.student?.name}</td>
-                <td>{rec.student?.email}</td>
-                <td>{new Date(rec.date).toLocaleDateString()}</td>
-                <td>{rec.status}</td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-    </div>
-  );
-}
+            {loading && <p className="loading-message">Loading report...</p>}
+            {error && !loading && <p className="message error">{error}</p>}
+            
+            {!loading && report.length > 0 && (
+                <div className="report-table-wrapper">
+                    <h3 className="report-header">Report for {subjectName}</h3>
+                    <table className="report-table">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Attended</th>
+                                <th>Missed</th>
+                                <th>Percentage</th>
+                                <th>Status for {new Date(selectedDate + 'T00:00:00').toLocaleDateString()}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {report.map(item => (
+                                <tr key={item.studentId}>
+                                    <td data-label="Student Name">{item.studentName}</td>
+                                    <td data-label="Attended">{item.attended} / {item.total}</td>
+                                    <td data-label="Missed">{item.missed}</td>
+                                    <td data-label="Percentage">
+                                        <span 
+                                            className="percentage-badge"
+                                            style={{
+                                                backgroundColor: item.percentage < 75 ? 'var(--accent-danger)' : 'var(--accent-success)'
+                                            }}
+                                        >
+                                            {item.percentage}%
+                                        </span>
+                                    </td>
+                                    <td className={`status-${item.statusForDay.replace(' ', '-').toLowerCase()}`}>
+                                        {item.statusForDay}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+        </div>
+    );
+};
 
 export default ViewAttendance;
-// This code defines a React component for viewing attendance records.
-// It fetches attendance data from an API, 
-// allows filtering by student name and date,
-// and provides sorting options for the records.
-// It displays the records in a table format with
-// options to clear filters and sort by different fields.

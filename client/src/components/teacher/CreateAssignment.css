@@ -1,0 +1,102 @@
+/* client/src/components/teacher/CreateAssignment.css */
+
+.create-assignment-container {
+    background-color: #1e1e1e;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid #2d3748;
+    margin-top: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.create-assignment-container h3 {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #f7fafc;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.create-assignment-form .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.create-assignment-form label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #a0aec0;
+    margin-bottom: 0.5rem;
+}
+
+.create-assignment-form input,
+.create-assignment-form select,
+.create-assignment-form textarea {
+    width: 100%;
+    padding: 12px;
+    background-color: #2d3748;
+    border: 1px solid #4a5568;
+    border-radius: 8px;
+    color: #e0e0e0;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.create-assignment-form input:focus,
+.create-assignment-form select:focus,
+.create-assignment-form textarea:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+}
+
+.create-assignment-form textarea {
+    resize: vertical;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #3182ce;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 1rem;
+}
+
+.submit-btn:hover:not(:disabled) {
+    background-color: #2b6cb0;
+}
+
+.submit-btn:disabled {
+    background-color: #4a5568;
+    cursor: not-allowed;
+}
+
+.message {
+    text-align: center;
+    padding: 10px;
+    margin-top: 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.success-message {
+    color: #38a169;
+    background-color: rgba(56, 161, 105, 0.1);
+    border: 1px solid rgba(56, 161, 105, 0.2);
+}
+
+.error-message {
+    color: #e53e3e;
+    background-color: rgba(229, 62, 62, 0.1);
+    border: 1px solid rgba(229, 62, 62, 0.2);
+}

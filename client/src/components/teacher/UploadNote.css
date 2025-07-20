@@ -1,0 +1,36 @@
+/* client/src/components/teacher/UploadNote.css */
+
+.upload-note-container {
+    background-color: var(--background-secondary);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--background-tertiary);
+}
+
+.upload-note-container h3 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    color: var(--text-white);
+    border-bottom: 1px solid var(--background-tertiary);
+    padding-bottom: 0.75rem;
+}
+
+/* Custom styling for the file input button */
+input[type="file"] {
+    color: var(--text-secondary);
+}
+input[type="file"]::file-selector-button {
+    margin-right: 1rem;
+    border: 1px solid var(--background-interactive);
+    padding: 8px 12px;
+    border-radius: 6px;
+    background-color: var(--background-tertiary);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background-color .2s ease-in-out;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: var(--background-interactive);
+}

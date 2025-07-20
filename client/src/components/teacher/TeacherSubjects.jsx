@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../axios";
+import './TeacherSubjects.css'; // --- 1. IMPORT THE NEW CSS FILE ---
 
-const TeacherSubjects = () => {
+const TeacherSubjects = ({ refreshTrigger }) => {
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(
-          "http://localhost:5000/api/subjects/teacher",
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        const res = await axios.get("/subjects/teacher");
         setSubjects(res.data);
       } catch (err) {
         setSubjects([]);
@@ -21,23 +18,25 @@ const TeacherSubjects = () => {
       }
     };
     fetchSubjects();
-  }, []);
+  }, [refreshTrigger]);
 
   if (loading) return <p>Loading subjects...</p>;
 
   return (
-    <div>
+    // --- 2. USE NEW CSS CLASSES FOR STYLING ---
+    <div className="teacher-subjects-container">
       <h3>Your Subjects</h3>
       {subjects.length === 0 ? (
-        <p>You are not handling any subjects yet.</p>
+        <p className="no-subjects-message">You have not created any subjects yet.</p>
       ) : (
-        <ul>
+        <div className="subjects-list">
           {subjects.map((subj) => (
-            <li key={subj._id}>
-              {subj.name} ({subj.code})
-            </li>
+            <div key={subj._id} className="subject-item">
+              <span className="subject-name">{subj.name}</span>
+              <span className="subject-code">{subj.code}</span>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

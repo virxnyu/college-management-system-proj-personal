@@ -1,0 +1,95 @@
+/* client/src/pages/SubjectNotesPage.css */
+
+.notes-page-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    font-family: var(--font-primary);
+}
+
+.notes-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.notes-header h2 {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.notes-header h1 {
+    color: var(--text-white);
+    font-size: 2.75rem;
+    font-weight: 700;
+    margin: 0.5rem 0 0 0;
+}
+
+.notes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.note-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--background-secondary);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--background-tertiary);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.note-item:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-primary);
+}
+
+.note-icon-title {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.file-icon {
+    font-size: 2rem;
+}
+
+.note-info h4 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.note-info p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.download-btn {
+    padding: 10px 20px;
+    background-color: var(--accent-primary);
+    color: var(--text-white);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.download-btn:hover {
+    background-color: var(--accent-primary-hover);
+}
+
+.no-notes-message {
+    text-align: center;
+    padding: 3rem;
+    background-color: var(--background-secondary);
+    border: 1px dashed var(--background-tertiary);
+    border-radius: 12px;
+    color: var(--text-secondary);
+}

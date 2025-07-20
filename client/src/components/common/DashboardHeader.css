@@ -1,0 +1,47 @@
+/* client/src/components/common/DashboardHeader.css */
+
+.dashboard-header-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--background-tertiary);
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.header-content h1 {
+    font-size: 2.5rem;
+    margin: 0;
+    color: var(--text-white);
+}
+
+.header-content p {
+    font-size: 1rem;
+    margin: 0.25rem 0 0 0;
+    color: var(--text-secondary);
+}
+
+.header-user-info {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.welcome-message {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.logout-button {
+    padding: 8px 16px;
+    background-color: var(--background-tertiary);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.logout-button:hover {
+    background-color: var(--background-interactive);
+}

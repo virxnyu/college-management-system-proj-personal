@@ -1,0 +1,86 @@
+/* client/src/pages/Auth.css */
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background-primary);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Optional: Add a subtle background effect */
+.auth-page::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(49, 130, 206, 0.1), transparent 40%);
+    animation: rotateBackground 20s linear infinite;
+}
+
+@keyframes rotateBackground {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.auth-form-container {
+    width: 100%;
+    max-width: 400px;
+    background-color: rgba(30, 30, 30, 0.7);
+    backdrop-filter: blur(15px);
+    padding: 3rem;
+    border-radius: 16px;
+    border: 1px solid var(--background-tertiary);
+    z-index: 1;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.auth-form-container h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: var(--text-white);
+    margin-top: 0;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group input,
+.form-group select {
+    /* Styles are inherited from index.css, no need to repeat */
+}
+
+.auth-button {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.auth-message {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-weight: 500;
+}
+.auth-message.success { color: var(--accent-success); }
+.auth-message.error { color: var(--accent-danger); }
+
+.switch-auth-link {
+    text-align: center;
+    margin-top: 2rem;
+    color: var(--text-secondary);
+}
+
+.switch-auth-link a {
+    font-weight: 600;
+    color: var(--accent-primary);
+    text-decoration: none;
+}
+.switch-auth-link a:hover {
+    text-decoration: underline;
+}

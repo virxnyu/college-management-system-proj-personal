@@ -1,134 +1,144 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from '../axios';
+import './MarkAttendance.css'; // We will create this next
 
-function MarkAttendance() {
-  const [date, setDate] = useState('');
-  const [subjectId, setSubjectId] = useState('');
-  const [subjects, setSubjects] = useState([]);
-  const [students, setStudents] = useState([]);
-  const [marking, setMarking] = useState({}); // {studentId: "Present"/"Absent"}
-  const [message, setMessage] = useState('');
+const MarkAttendance = () => {
+    const [subjects, setSubjects] = useState([]);
+    const [students, setStudents] = useState([]);
+    
+    const [selectedSubject, setSelectedSubject] = useState('');
+    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
+    
+    const [attendance, setAttendance] = useState({}); // Stores { studentId: 'Present'/'Absent' }
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
 
-  const token = localStorage.getItem('token');
+    // Fetch teacher's subjects on initial load
+    useEffect(() => {
+        const fetchSubjects = async () => {
+            try {
+                const res = await axios.get("/subjects/teacher");
+                setSubjects(res.data);
+            } catch (err) {
+                setError("Could not fetch your subjects.");
+            }
+        };
+        fetchSubjects();
+    }, []);
 
-  // Fetch teacher's subjects on mount
-  useEffect(() => {
-    const fetchSubjects = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/api/subjects/teacher", {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setSubjects(res.data);
-      } catch (err) {
-        setSubjects([]);
-      }
-    };
-    fetchSubjects();
-  }, [token]);
-
-  // Fetch students enrolled in selected subject
-  useEffect(() => {
-    const fetchStudents = async () => {
-      if (!subjectId) {
-        setStudents([]);
-        return;
-      }
-      try {
-        const res = await axios.get(`http://localhost:5000/api/subjects/${subjectId}/students`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setStudents(res.data);
-      } catch (err) {
-        setStudents([]);
-      }
-    };
-    fetchStudents();
-  }, [subjectId, token]);
-
-  // Mark attendance for a student
-  const handleMark = async (studentId, status) => {
-    if (!date || !subjectId) {
-      setMessage("Please select date and subject first.");
-      return;
-    }
-    try {
-      await axios.post(
-        "http://localhost:5000/api/attendance",
-        {
-          studentId,
-          subjectId,
-          date,
-          status
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` }
+    // Fetch students when a subject is selected
+    useEffect(() => {
+        if (!selectedSubject) {
+            setStudents([]);
+            setAttendance({});
+            return;
         }
-      );
-      setMarking((prev) => ({ ...prev, [studentId]: status }));
-      setMessage(`Attendance marked as ${status} for student.`);
-    } catch (err) {
-      setMessage(err.response?.data?.message || "Error marking attendance");
-    }
-  };
+        const fetchStudents = async () => {
+            setLoading(true);
+            try {
+                const res = await axios.get(`/subjects/${selectedSubject}/students`);
+                setStudents(res.data);
+                // Initialize attendance state for the new list of students
+                const initialAttendance = {};
+                res.data.forEach(student => {
+                    initialAttendance[student._id] = 'Present'; // Default to Present
+                });
+                setAttendance(initialAttendance);
+            } catch (err) {
+                setError("Could not fetch students for this subject.");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchStudents();
+    }, [selectedSubject]);
 
-  return (
-    <div>
-      <h2>Mark Attendance</h2>
-      <div>
-        <label>Date: </label>
-        <input type="date" value={date} onChange={e => setDate(e.target.value)} required />
-      </div>
-      <div>
-        <label>Subject: </label>
-        <select value={subjectId} onChange={e => setSubjectId(e.target.value)} required>
-          <option value="">--Select Subject--</option>
-          {subjects.map(subject => (
-            <option key={subject._id} value={subject._id}>
-              {subject.name} ({subject.code})
-            </option>
-          ))}
-        </select>
-      </div>
-      <hr />
-      {students.length > 0 && (
-        <div>
-          <h4>Students Enrolled:</h4>
-          <ul>
-            {students.map(student => (
-              <li key={student._id}>
-                {student.name} ({student.email}){" "}
-                <button
-                  disabled={marking[student._id] === "Present"}
-                  onClick={() => handleMark(student._id, "Present")}
-                >
-                  Present
-                </button>
-                <button
-                  disabled={marking[student._id] === "Absent"}
-                  onClick={() => handleMark(student._id, "Absent")}
-                >
-                  Absent
-                </button>
-                {marking[student._id] && (
-                  <span style={{ marginLeft: 8 }}>
-                    ✅ Marked {marking[student._id]}
-                  </span>
-                )}
-              </li>
-            ))}
-          </ul>
+    const handleStatusChange = (studentId, status) => {
+        setAttendance(prev => ({ ...prev, [studentId]: status }));
+    };
+
+    const handleSubmit = async () => {
+        setMessage('');
+        setError('');
+        if (Object.keys(attendance).length === 0) {
+            setError("No students to mark.");
+            return;
+        }
+
+        const attendanceData = Object.entries(attendance).map(([studentId, status]) => ({
+            studentId,
+            status
+        }));
+
+        try {
+            await axios.post('/attendance/bulk-update', {
+                subjectId: selectedSubject,
+                date: selectedDate,
+                attendanceData
+            });
+            setMessage("Attendance submitted successfully!");
+        } catch (err) {
+            setError(err.response?.data?.message || "Failed to submit attendance.");
+        }
+    };
+
+    return (
+        <div className="mark-attendance-container">
+            <h1>Mark Daily Attendance</h1>
+            <div className="controls-container">
+                <div className="control-group">
+                    <label htmlFor="date-select">Select Date:</label>
+                    <input 
+                        id="date-select"
+                        type="date" 
+                        value={selectedDate} 
+                        onChange={e => setSelectedDate(e.target.value)} 
+                    />
+                </div>
+                <div className="control-group">
+                    <label htmlFor="subject-select">Select Subject:</label>
+                    <select id="subject-select" value={selectedSubject} onChange={e => setSelectedSubject(e.target.value)}>
+                        <option value="">-- Choose a Subject --</option>
+                        {subjects.map(s => <option key={s._id} value={s._id}>{s.name}</option>)}
+                    </select>
+                </div>
+            </div>
+
+            {loading && <p>Loading students...</p>}
+            
+            {!loading && students.length > 0 && (
+                <div className="student-list-container">
+                    <ul className="student-list">
+                        {students.map(student => (
+                            <li key={student._id} className="student-item">
+                                <span className="student-name">{student.name}</span>
+                                <div className="action-buttons">
+                                    <button 
+                                        className={`btn-present ${attendance[student._id] === 'Present' ? 'active' : ''}`}
+                                        onClick={() => handleStatusChange(student._id, 'Present')}
+                                    >
+                                        Present
+                                    </button>
+                                    <button 
+                                        className={`btn-absent ${attendance[student._id] === 'Absent' ? 'active' : ''}`}
+                                        onClick={() => handleStatusChange(student._id, 'Absent')}
+                                    >
+                                        Absent
+                                    </button>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                    <button className="submit-all-btn" onClick={handleSubmit}>
+                        Submit Attendance for {new Date(selectedDate + 'T00:00:00').toLocaleDateString()}
+                    </button>
+                    {message && <p className="message success">{message}</p>}
+                    {error && <p className="message error">{error}</p>}
+                </div>
+            )}
         </div>
-      )}
-      {message && <p>{message}</p>}
-    </div>
-  );
-}
+    );
+};
 
 export default MarkAttendance;
-// This component allows teachers to mark attendance for students in a selected subject on a specific date.
-// It fetches the subjects taught by the teacher and the students enrolled in the selected subject.
-// Teachers can mark each student as "Present" or "Absent", and the attendance is saved via an API call.
-// The component also handles error messages and displays the current attendance status for each student.
-// Make sure to adjust the API endpoints and data structure according to your backend implementation.
-// This code assumes you have a backend API set up to handle attendance marking and fetching subjects/students
-// You can integrate this component into your teacher dashboard or as a separate page in your application.

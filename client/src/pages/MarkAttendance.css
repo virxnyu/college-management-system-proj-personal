@@ -1,0 +1,128 @@
+/* client/src/pages/MarkAttendance.css */
+
+.mark-attendance-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    font-family: var(--font-primary);
+}
+
+.mark-attendance-container h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--text-white);
+    margin-bottom: 2rem;
+}
+
+.controls-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    background-color: var(--background-secondary);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--background-tertiary);
+    margin-bottom: 2rem;
+}
+
+.student-list-container {
+    background-color: var(--background-secondary);
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--background-tertiary);
+}
+
+.student-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.student-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--background-tertiary);
+    flex-wrap: wrap; /* Allow wrapping */
+    gap: 1rem;
+}
+
+.student-item:last-child {
+    border-bottom: none;
+}
+
+.student-name {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-buttons button {
+    padding: 8px 16px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.btn-present {
+    background-color: var(--background-tertiary);
+    color: var(--text-secondary);
+}
+
+.btn-present.active {
+    background-color: var(--accent-success);
+    color: var(--text-white);
+    border-color: var(--accent-success);
+}
+
+.btn-absent {
+    background-color: var(--background-tertiary);
+    color: var(--text-secondary);
+}
+
+.btn-absent.active {
+    background-color: var(--accent-danger);
+    color: var(--text-white);
+    border-color: var(--accent-danger);
+}
+
+.submit-all-btn {
+    width: 100%;
+    margin-top: 2rem;
+    padding: 14px;
+    font-size: 1.1rem;
+}
+
+.message {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-weight: 500;
+}
+.message.success { color: var(--accent-success); }
+.message.error { color: var(--accent-danger); }
+
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 768px) {
+    .mark-attendance-container {
+        padding: 1rem;
+    }
+
+    .controls-container {
+        flex-direction: column; /* Stack controls vertically */
+        align-items: stretch;
+    }
+
+    .student-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

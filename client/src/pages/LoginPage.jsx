@@ -1,67 +1,60 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import "./Login.css"; // ✅ Import the scoped CSS
+import axios from "../axios"; // Use the central axios instance
+import { useNavigate, Link } from "react-router-dom";
+import './Auth.css'; // Use the new shared CSS
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("student");
-  const [message, setMessage] = useState("");
-
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError('');
 
     const endpointMap = {
-      admin: "/api/admin/login",
-      teacher: "/api/teacher/login",
-      student: "/api/student/login",
+      admin: "/admin/login",
+      teacher: "/teacher/login",
+      student: "/student/login",
     };
 
     try {
-      const response = await axios.post(`http://localhost:5000${endpointMap[role]}`, {
-        email,
-        password,
-      });
-
-      setMessage("✅ Login successful!");
+      const response = await axios.post(endpointMap[role], { email, password });
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("role", role);
-
       navigate("/dashboard");
     } catch (err) {
-      setMessage("❌ Login failed: " + (err.response?.data?.message || err.message));
+      setError(err.response?.data?.message || "Login failed. Please check your credentials.");
     }
   };
 
   return (
-    <div className="login-page">
-      <form className="login-form" onSubmit={handleLogin}>
-        <h2>Login Portal</h2>
-        <select value={role} onChange={(e) => setRole(e.target.value)}>
-          <option value="student">Student</option>
-          <option value="teacher">Teacher</option>
-          <option value="admin">Admin</option>
-        </select>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Login</button>
-        {message && <p>{message}</p>}
-      </form>
+    <div className="auth-page">
+        <div className="auth-form-container">
+            <h2>Welcome Back!</h2>
+            <form onSubmit={handleLogin}>
+                <div className="form-group">
+                    <select value={role} onChange={(e) => setRole(e.target.value)}>
+                        <option value="student">Login as Student</option>
+                        <option value="teacher">Login as Teacher</option>
+                        <option value="admin">Login as Admin</option>
+                    </select>
+                </div>
+                <div className="form-group">
+                    <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                </div>
+                <div className="form-group">
+                    <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                </div>
+                <button type="submit" className="auth-button">Login</button>
+            </form>
+            {error && <p className="auth-message error">{error}</p>}
+            <p className="switch-auth-link">
+                Don't have an account? <Link to="/register">Register Now</Link>
+            </p>
+        </div>
     </div>
   );
 }

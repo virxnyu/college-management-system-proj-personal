@@ -1,0 +1,49 @@
+/* client/src/components/teacher/TeacherDashboard.css */
+
+.teacher-dashboard-container {
+    padding: 0 2rem 2rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.dashboard-nav-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.teacher-dashboard-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Default: 2 columns */
+    gap: 2.5rem;
+    align-items: start;
+}
+
+.dashboard-column {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+
+/* --- MOBILE RESPONSIVENESS --- */
+/* On screens smaller than 992px (tablets and large phones) */
+@media (max-width: 992px) {
+    .teacher-dashboard-layout {
+        grid-template-columns: 1fr; /* Stack the columns into a single column */
+    }
+}
+
+/* On screens smaller than 768px (most phones) */
+@media (max-width: 768px) {
+    .teacher-dashboard-container {
+        padding: 0 1rem 1rem 1rem; /* Reduce padding on mobile */
+    }
+
+    .dashboard-nav-links {
+        flex-direction: column; /* Stack the nav links vertically */
+        align-items: stretch;
+        text-align: center;
+    }
+}

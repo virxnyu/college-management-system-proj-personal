@@ -1,0 +1,172 @@
+/* client/src/pages/StudentAssignments.css */
+
+.student-assignments-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    font-family: var(--font-primary);
+}
+
+.assignments-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.assignments-header h1 {
+    font-size: 2.5rem;
+    color: var(--text-white);
+    margin: 0;
+}
+
+.assignments-header p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+.back-to-dash {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.assignments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.assignment-item {
+    background-color: var(--background-secondary);
+    border: 1px solid var(--background-tertiary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.assignment-item.submitted {
+    border-left: 5px solid var(--accent-success);
+}
+
+.assignment-item.past-due {
+     border-left: 5px solid var(--accent-danger);
+}
+
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid var(--background-tertiary);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    gap: 1rem; /* Add gap for spacing */
+}
+
+.item-title-subject h4 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--text-white);
+}
+
+.item-title-subject span {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    background-color: var(--background-tertiary);
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin-top: 0.25rem;
+    display: inline-block;
+}
+
+.item-due-date {
+    text-align: right;
+    flex-shrink: 0; /* Prevent due date from shrinking */
+}
+
+.item-due-date span {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.item-due-date p {
+    margin: 0.25rem 0 0 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-white);
+}
+
+.item-description {
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.submission-form {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+}
+
+.submission-form input[type="file"] {
+    flex-grow: 1;
+}
+
+.submission-form button {
+    padding: 8px 16px;
+    font-weight: 500;
+}
+
+.submission-status.success {
+    color: var(--accent-success);
+    font-weight: 600;
+    background-color: rgba(56, 161, 105, 0.1);
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.submission-status.past-due-message {
+    color: var(--accent-danger);
+    font-weight: 600;
+    text-align: center;
+}
+
+.submission-message {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+    flex-basis: 100%;
+    text-align: center;
+}
+.submission-message.error { color: var(--accent-danger); }
+.submission-message.success { color: var(--accent-success); }
+
+
+.no-assignments-message {
+    text-align: center;
+    padding: 3rem;
+    background-color: var(--background-secondary);
+    border: 1px dashed var(--background-tertiary);
+    border-radius: 12px;
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 768px) {
+    .student-assignments-container {
+        padding: 1rem;
+    }
+
+    .item-header {
+        flex-direction: column; /* Stack title and due date */
+        align-items: flex-start;
+    }
+
+    .item-due-date {
+        text-align: left;
+        margin-top: 0.75rem;
+    }
+}

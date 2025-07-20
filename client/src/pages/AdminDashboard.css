@@ -1,0 +1,121 @@
+/* client/src/pages/AdminDashboard.css */
+
+.admin-dashboard-container {
+    padding: 0 2rem 2rem 2rem;
+    max-width: 1600px; /* Allow it to be wider */
+    margin: 0 auto;
+    font-family: var(--font-primary);
+}
+
+.admin-layout {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr; /* Default: Three columns */
+    gap: 2.5rem;
+    align-items: start;
+}
+
+.user-management-section, .add-user-section {
+    background-color: var(--background-secondary);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--background-tertiary);
+    height: 100%;
+}
+
+.user-management-section h3, .add-user-section h3 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    color: var(--text-white);
+    border-bottom: 1px solid var(--background-tertiary);
+    padding-bottom: 0.75rem;
+}
+
+.user-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: var(--background-tertiary);
+    border-radius: 8px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-info .name {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.user-info .email {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.user-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+}
+
+.user-actions button:hover {
+    color: var(--text-white);
+}
+
+/* Edit Form Styling */
+.edit-form {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: var(--background-primary);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.edit-form input {
+    margin-bottom: 0.5rem;
+}
+
+
+/* --- MOBILE RESPONSIVENESS --- */
+
+/* For Tablets (e.g., iPads) */
+@media (max-width: 1200px) {
+    .admin-layout {
+        /* Stack into two columns: Users | Add Form */
+        grid-template-columns: 1fr 1fr; 
+    }
+    .add-user-section {
+        /* Move the Add User form to the next row */
+        grid-column: 1 / -1; /* Span the full width */
+    }
+}
+
+/* For Mobile Phones */
+@media (max-width: 768px) {
+    .admin-dashboard-container {
+        padding: 0 1rem 1rem 1rem;
+    }
+    .admin-layout {
+        /* Stack everything into a single column */
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,58 @@
+/* client/src/components/teacher/TeacherSubjects.css */
+
+.teacher-subjects-container {
+    background-color: var(--background-secondary);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--background-tertiary);
+    height: 100%; /* Ensures it fills the grid column height */
+}
+
+.teacher-subjects-container h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    color: var(--text-white);
+    border-bottom: 1px solid var(--background-tertiary);
+    padding-bottom: 0.75rem;
+}
+
+.subjects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.subject-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--background-tertiary);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.subject-item:hover {
+    background-color: var(--background-interactive);
+}
+
+.subject-name {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.subject-code {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background-color: var(--background-primary);
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.no-subjects-message {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 1rem 0;
+}

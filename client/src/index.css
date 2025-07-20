@@ -1,111 +1,154 @@
-/* index.css */
+/* client/src/index.css */
 
+/* --- 1. THEME & FONT DEFINITION (CSS VARIABLES) --- */
+:root {
+  --background-primary: #121212;      /* Deepest black for page background */
+  --background-secondary: #1e1e1e;    /* Slightly lighter for cards, modals */
+  --background-tertiary: #2d3748;     /* For inputs, borders, hover states */
+  --background-interactive: #4a5568; /* For hovered interactive elements */
+  
+  --text-primary: #e0e0e0;            /* Main text color, slightly off-white */
+  --text-secondary: #a0aec0;          /* Lighter gray for labels, subtext */
+  --text-white: #ffffff;              /* For main headings */
+
+  --accent-primary: #3182ce;          /* Main blue for buttons, links */
+  --accent-primary-hover: #2b6cb0;    /* Darker blue for hover */
+  --accent-success: #38a169;          /* Green for success states */
+  --accent-warning: #ffc107;          /* Yellow for warnings */
+  --accent-danger: #e53e3e;           /* Red for errors */
+
+  --font-primary: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* --- 2. GLOBAL STYLES & RESETS --- */
 body {
   margin: 0;
-  font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
-  background: linear-gradient(to right, #292364, #79787b, #77b085);
-  color: #ffffff;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 40px 20px;
+  font-family: var(--font-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  background-color: var(--background-primary); 
+  color: var(--text-primary);
 }
 
-h1 {
-  font-family: 'Georgia', serif;
-  font-size: 2.8rem;
-  color: #f9f871;
-  text-shadow: 0 0 10px #f9f87180;
-  margin-bottom: 20px;
+* {
+  box-sizing: border-box;
 }
 
-.todo-container {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(8px);
-  border-radius: 16px;
-  padding: 30px 25px;
+/* --- 3. MODERN SCROLLBAR STYLING --- */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--background-tertiary);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--background-interactive);
+}
+
+/* --- 4. TYPOGRAPHY & HEADINGS --- */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-white);
+  font-weight: 600;
+}
+
+p {
+  line-height: 1.6;
+}
+
+a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--accent-primary-hover);
+}
+
+/* --- 5. MODERN FORM & BUTTON STYLES --- */
+input,
+select,
+textarea {
   width: 100%;
-  max-width: 600px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-input[type="text"] {
   padding: 12px;
-  width: 70%;
-  margin-right: 10px;
-  border: none;
+  background-color: var(--background-tertiary);
+  border: 1px solid var(--background-interactive);
   border-radius: 8px;
+  color: var(--text-primary);
   font-size: 1rem;
-  background-color: #ffffff20;
-  color: #ffffff;
-  backdrop-filter: blur(4px);
+  font-family: var(--font-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-input[type="text"]::placeholder {
-  color: #cccccc;
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.3);
 }
 
 button {
-  padding: 10px 14px;
-  font-size: 0.9rem;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  background-color: #f9f871;
-  color: #000;
-  transition: all 0.3s ease;
+  background-color: var(--accent-primary);
+  color: var(--text-white);
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-button:hover {
-  background-color: #fff500;
+button:hover:not(:disabled) {
+  background-color: var(--accent-primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(255, 255, 0, 0.4);
 }
 
-ul {
-  list-style: none;
-  padding: 0;
-  margin-top: 20px;
+button:disabled {
+  background-color: var(--background-interactive);
+  cursor: not-allowed;
 }
 
-li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 12px 0;
-  padding: 10px;
-  background-color: rgba(255, 255, 255, 0.07);
+
+/* --- 6. SUBTLE PAGE LOAD ANIMATION --- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply the animation to our main page containers */
+.student-dashboard-container,
+.command-center-container,
+.teacher-dashboard-container, /* Add a class to your TeacherDashboard main div */
+.view-submissions-container,
+.student-assignments-container {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.dashboard-link {
+  display: inline-block;
+  background-color: var(--background-secondary);
+  color: var(--text-primary);
+  padding: 12px 24px;
   border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.2s;
+  border: 1px solid var(--background-tertiary);
 }
 
-li input[type="checkbox"] {
-  margin-right: 12px;
-  transform: scale(1.2);
+.dashboard-link:hover {
+  background-color: var(--background-tertiary);
 }
-
-li span {
-  flex-grow: 1;
-  font-size: 1.1rem;
-  color: #e0e0e0;
-}
-
-li.completed span {
-  text-decoration: line-through;
-  color: #888;
-}
-
-li button {
-  margin-left: 8px;
-  background-color: transparent;
-  color: #f9f871;
-  font-size: 1.2rem;
-}
-
-li button:hover {
-  color: #fff500;
-  transform: scale(1.1);
-}
-
-

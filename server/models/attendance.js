@@ -1,3 +1,5 @@
+// server/models/attendance.js
+
 const mongoose = require("mongoose");
 
 const attendanceSchema = new mongoose.Schema({
@@ -17,7 +19,7 @@ const attendanceSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["Present", "Absent", "Late"],
+    enum: ["Present", "Absent"], // <-- CHANGED: Removed "Late"
     required: true
   },
   markedBy: {
@@ -28,8 +30,3 @@ const attendanceSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Attendance", attendanceSchema);
-
-
-// This model defines the structure for attendance records, linking students and teachers.
-// It includes fields for the student ID, date of attendance, status (Present, Absent, Late),
-// and the teacher who marked the attendance.
