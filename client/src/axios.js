@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-// Create a central axios instance
+// Determine the base URL based on the environment
+const productionUrl = 'https://college-system-sq7j.onrender.com/api'; // ✅ Your deployed backend URL
+
 const instance = axios.create({
-    // The baseURL will now be handled by the proxy, so we can use relative paths.
-    // We only need to specify the common part of our API routes.
-    baseURL: '/api' 
+    baseURL: process.env.NODE_ENV === 'production' ? productionUrl : '/api'
 });
 
 // Add a request interceptor to automatically attach the token to every request
