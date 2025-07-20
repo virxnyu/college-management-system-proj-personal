@@ -1,7 +1,7 @@
 const Attendance = require("../models/attendance");
 const Subject = require("../models/Subject");
 const Student = require("../models/Student");
-import Notification from "../models/Notification.js";
+const Notification = require("../models/Notification"); // --- 1. IMPORT THE NOTIFICATION MODEL ---
 const mongoose = require('mongoose');
 
 // @desc    Get detailed attendance for a single subject (for student)
