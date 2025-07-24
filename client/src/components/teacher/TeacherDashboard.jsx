@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom"; // --- 1. IMPORT THE LINK COMPONENT ---
 import CreateAssignment from './CreateAssignment';
 import TeacherAssignments from "./TeacherAssignments";
 import TeacherSubjects from './TeacherSubjects';
 import CreateSubject from './CreateSubject';
 import UploadNote from './UploadNote';
 import DashboardHeader from '../common/DashboardHeader';
-import './TeacherDashboard.css'; // --- 1. IMPORT THE DEDICATED CSS FILE ---
+import './TeacherDashboard.css';
 
 const TeacherDashboard = () => {
   const [assignmentRefreshTrigger, setAssignmentRefreshTrigger] = useState(0);
@@ -20,21 +21,20 @@ const TeacherDashboard = () => {
   };
 
   const handleNoteUploaded = () => {
-    // Kept for future use, like refreshing a notes list
     console.log("A new note was uploaded!");
   };
 
   return (
-    // --- 2. USE CSS CLASSES INSTEAD OF INLINE STYLES ---
     <div className="teacher-dashboard-container">
       <DashboardHeader 
         title="Teacher Dashboard"
         subtitle="Manage your subjects, assignments, and student attendance."
       />
       
+      {/* --- 2. REPLACE <a> TAGS WITH <Link> COMPONENTS --- */}
       <div className="dashboard-nav-links">
-        <a href="/mark-attendance" className="dashboard-link">✅ Mark Attendance</a>
-        <a href="/view-attendance" className="dashboard-link">📄 View Reports</a>
+        <Link to="/mark-attendance" className="dashboard-link">✅ Mark Attendance</Link>
+        <Link to="/view-attendance" className="dashboard-link">📄 View Reports</Link>
       </div>
       
       <div className="teacher-dashboard-layout">

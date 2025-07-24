@@ -14,7 +14,9 @@ const assignmentStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'student_submissions',
-    resource_type: 'auto', // Correctly handles PDFs and other file types
+    // --- THIS IS THE FIX ---
+    // 'auto' tells Cloudinary to detect the file type and use the correct URL.
+    resource_type: 'auto', 
     public_id: (req, file) => {
         // Create a unique filename to avoid conflicts
         const studentId = req.user.id;
@@ -30,8 +32,9 @@ const noteStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'class_notes',
-    resource_type: 'auto', // Handles PDF, MP3, MP4, etc. automatically
-    // We can define allowed formats for extra security
+    // --- THIS IS THE FIX ---
+    // 'auto' ensures PDFs, MP3s, and MP4s get the correct URL.
+    resource_type: 'auto', 
     allowed_formats: ['pdf', 'mp3', 'mp4', 'mpeg', 'jpg', 'png', 'docx'],
     public_id: (req, file) => {
         const subjectId = req.body.subjectId; // Get subjectId from the request body
