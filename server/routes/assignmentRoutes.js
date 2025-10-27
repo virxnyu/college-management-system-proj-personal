@@ -1,46 +1,43 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-
-// Import controller functions
 const {
     createAssignment,
-    getAssignmentsBySubject,
+    getAssignmentsBySubject, // Used by both Teacher and Student, logic inside controller differentiates
     getSubmissionsForAssignment,
     createSubmission,
     getStudentDashboardAssignments,
     getAssignmentDetails,
     getTeacherAssignments
-} = require('../controllers/assignmentController');
+} = require("../controllers/assignmentController");
 
-// Import middleware
-const verifyToken = require('../middleware/authMiddleware');
-const requireRole = require('../middleware/roleMiddleware');
-// --- THIS IS THE FIX ---
-// We now import the specific handler for assignments
-const { uploadAssignment } = require('../middleware/uploadMiddleware');
+// --- USE THE NEW FIREBASE MIDDLEWARE ---
+const verifyFirebaseToken = require("../middleware/verifyFirebaseToken"); 
+const requireRole = require("../middleware/roleMiddleware"); // Keep requireRole
+const { uploadAssignment } = require('../middleware/uploadMiddleware'); // Ensure correct import
 
-// --- Teacher Routes ---
-router.post('/', verifyToken, requireRole('teacher'), createAssignment);
-router.get('/:assignmentId/submissions', verifyToken, requireRole('teacher'), getSubmissionsForAssignment);
-router.get('/teacher/all', verifyToken, requireRole('teacher'), getTeacherAssignments);
+// --- TEACHER ROUTES ---
+// Create a new assignment
+router.post("/", verifyFirebaseToken, requireRole("teacher"), createAssignment); // Use new middleware
 
+// Get all assignments created BY the logged-in teacher (for teacher dashboard list)
+router.get("/teacher/all", verifyFirebaseToken, requireRole("teacher"), getTeacherAssignments); // Use new middleware
 
-// --- Student Routes ---
-router.get('/student/all', verifyToken, requireRole('student'), getStudentDashboardAssignments);
+// Get all student submissions for a specific assignment
+router.get("/:assignmentId/submissions", verifyFirebaseToken, requireRole("teacher"), getSubmissionsForAssignment); // Use new middleware
 
-// This route now correctly uses the dedicated assignment upload middleware
-router.post(
-    '/:assignmentId/submit', 
-    verifyToken, 
-    requireRole('student'), 
-    uploadAssignment.single('submissionFile'), 
-    createSubmission
-);
+// --- STUDENT ROUTES ---
+// Submit work for an assignment (includes file upload middleware)
+router.post("/:assignmentId/submit", verifyFirebaseToken, requireRole("student"), uploadAssignment.single('file'), createSubmission); // Use new middleware
 
+// Get all assignments for subjects the logged-in student is ENROLLED IN (for student dashboard)
+router.get("/student/all", verifyFirebaseToken, requireRole("student"), getStudentDashboardAssignments); // Use new middleware
 
-// --- Shared Routes ---
-router.get('/subject/:subjectId', verifyToken, getAssignmentsBySubject);
-router.get('/:assignmentId', verifyToken, getAssignmentDetails);
+// --- SHARED ROUTES --- 
+// Get assignments FOR a specific subject (used by teacher/student subject view)
+router.get("/subject/:subjectId", verifyFirebaseToken, getAssignmentsBySubject); // Use new middleware (role check inside controller maybe?)
+
+// Get details for a SINGLE assignment (e.g., for viewing submission page header)
+router.get("/:assignmentId", verifyFirebaseToken, getAssignmentDetails); // Use new middleware
 
 
 module.exports = router;

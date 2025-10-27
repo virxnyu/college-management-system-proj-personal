@@ -186,3 +186,38 @@
         gap: 1.5rem;
     }
 }
+
+/* Add this to the end of StudentDashboard.css */
+
+.dashboard-actions {
+    display: flex; /* Changed to flex */
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+    justify-content: space-between; /* Space out items */
+    align-items: flex-start; /* Align items to the top */
+    gap: 2rem; /* Add gap between items */
+    margin-bottom: 2.5rem;
+}
+
+/* Make search and enroll take appropriate space */
+.dashboard-actions > div:first-child { /* Target SubjectSearch */
+    flex: 2; /* Allow search to take more space */
+    min-width: 300px; /* Minimum width for search */
+}
+.dashboard-actions > div:last-child { /* Target EnrollSubject */
+     flex: 1;
+     min-width: 250px; /* Minimum width for enroll */
+}
+
+/* Ensure full width message spans grid */
+.full-width-message {
+    grid-column: 1 / -1; /* Make message span all columns if grid is active */
+}
+
+/* Style for message when no attendance marked yet */
+.no-attendance-yet {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 1rem;
+    font-style: italic;
+}

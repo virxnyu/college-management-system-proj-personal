@@ -1,53 +1,40 @@
 const express = require("express");
 const router = express.Router();
-
-// Import controller functions
-const {
-  createSubject,
-  enrollStudent,
-  getSubjectsByTeacher,
-  getSubjectsByStudent,
-  getStudentsBySubject,
-  getAllSubjects,
-  getSubjectById
-} = require("../controllers/subjectController");
-
-// Import middleware
-const verifyToken = require("../middleware/authMiddleware");
-const requireRole = require("../middleware/roleMiddleware");
+const subjectController = require("../controllers/subjectController"); // Import the controller
+const verifyFirebaseToken = require('../middleware/verifyFirebaseToken'); // Use Firebase auth middleware
+const requireRole = require('../middleware/roleMiddleware'); // Use updated role middleware
 
 // --- Routes ---
 
-// @route   POST /api/subjects
-// @desc    Teacher creates a new subject
-// @access  Private (Teacher)
-router.post("/", verifyToken, requireRole("teacher"), createSubject);
+// GET /api/subjects (Get all subjects - for student enrollment list)
+router.get("/", verifyFirebaseToken, subjectController.getAllSubjects);
 
-// @route   POST /api/subjects/enroll
-// @desc    Student enrolls in a subject
-// @access  Private (Student)
-router.post("/enroll", verifyToken, requireRole("student"), enrollStudent);
+// GET /api/subjects/teacher (Teacher gets their created subjects)
+router.get("/teacher", verifyFirebaseToken, requireRole("teacher"), subjectController.getSubjectsByTeacher);
 
-// @route   GET /api/subjects/teacher
-// @desc    Teacher views their created subjects
-// @access  Private (Teacher)
-router.get("/teacher", verifyToken, requireRole("teacher"), getSubjectsByTeacher);
+// GET /api/subjects/student (Student gets their enrolled subjects)
+router.get("/student", verifyFirebaseToken, requireRole("student"), subjectController.getSubjectsByStudent);
 
-// @route   GET /api/subjects/student
-// @desc    Student views their enrolled subjects
-// @access  Private (Student)
-router.get("/student", verifyToken, requireRole("student"), getSubjectsByStudent);
+// GET /api/subjects/:subjectId (Get details for a single subject - used by MyAttendance)
+router.get("/:subjectId", verifyFirebaseToken, subjectController.getSubjectById);
 
-// @route   GET /api/subjects/:subjectId/students
-// @desc    Teacher views students enrolled in a specific subject
-// @access  Private (Teacher)
-router.get("/:subjectId/students", verifyToken, requireRole("teacher"), getStudentsBySubject);
+// GET /api/subjects/:subjectId/students (Teacher gets students for a specific subject)
+router.get("/:subjectId/students", verifyFirebaseToken, requireRole("teacher"), subjectController.getStudentsBySubject);
 
-// @route   GET /api/subjects
-// @desc    Get all subjects (for any authenticated user to see)
-// @access  Private
-router.get("/", verifyToken, getAllSubjects);
+// --- ADD THIS NEW ROUTE ---
+// GET /api/subjects/search?q=... (Search subjects by name or code)
+router.get("/search", verifyFirebaseToken, subjectController.searchSubjects);
+// --- END ADD ---
 
-router.get("/:subjectId", verifyToken, getSubjectById);
+// POST /api/subjects (Teacher creates a new subject)
+router.post("/", verifyFirebaseToken, requireRole("teacher"), subjectController.createSubject);
+
+// POST /api/subjects/enroll (Student enrolls in a subject)
+router.post("/enroll", verifyFirebaseToken, requireRole("student"), subjectController.enrollStudent);
+
+// DELETE /api/subjects/:subjectId (Teacher deletes a subject - cascading delete)
+router.delete("/:subjectId", verifyFirebaseToken, requireRole("teacher"), subjectController.deleteSubject);
+
 
 module.exports = router;
+

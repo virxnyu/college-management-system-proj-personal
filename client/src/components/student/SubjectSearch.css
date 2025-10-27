@@ -1,0 +1,107 @@
+/* client/src/components/student/SubjectSearch.css */
+
+.subject-search-container {
+    background-color: var(--background-secondary);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--background-tertiary);
+    margin-bottom: 2rem; /* Add some space below */
+}
+
+.subject-search-container h4 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    color: var(--text-white);
+    border-bottom: 1px solid var(--background-tertiary);
+    padding-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--background-tertiary);
+    background-color: var(--background-primary); /* Match theme */
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.search-input::placeholder {
+    color: var(--text-secondary);
+}
+
+.loading-message,
+.error-message,
+.no-results-message {
+    text-align: center;
+    color: var(--text-secondary);
+    font-style: italic;
+    padding: 1rem 0;
+}
+
+.error-message {
+    color: var(--accent-danger);
+    font-style: normal;
+    font-weight: 500;
+}
+
+.search-results-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px; /* Limit height and make scrollable */
+    overflow-y: auto;
+    border: 1px solid var(--background-tertiary);
+    border-radius: 8px;
+}
+
+/* Style the scrollbar */
+.search-results-list::-webkit-scrollbar {
+    width: 8px;
+}
+.search-results-list::-webkit-scrollbar-track {
+    background: var(--background-primary);
+    border-radius: 8px;
+}
+.search-results-list::-webkit-scrollbar-thumb {
+    background: var(--background-tertiary);
+    border-radius: 8px;
+}
+.search-results-list::-webkit-scrollbar-thumb:hover {
+    background: var(--background-interactive);
+}
+
+
+.search-result-item {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--background-tertiary);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item:hover {
+    background-color: var(--background-interactive);
+}
+
+.result-name {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.result-teacher {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}

@@ -35,6 +35,7 @@ const TeacherDashboard = () => {
       <div className="dashboard-nav-links">
         <Link to="/mark-attendance" className="dashboard-link">✅ Mark Attendance</Link>
         <Link to="/view-attendance" className="dashboard-link">📄 View Reports</Link>
+        <Link to="/enter-marks" className="dashboard-link">💯 Enter Marks</Link> 
       </div>
       
       <div className="teacher-dashboard-layout">

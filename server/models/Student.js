@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
 const studentSchema = new mongoose.Schema({
+  firebaseUid: { // --- ADDED ---
+    type: String,
+    required: true,
+    unique: true, // Each Firebase user should only have one student profile
+  },
   name: {
     type: String,
     required: true,
@@ -9,13 +14,10 @@ const studentSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true, // no two users can use same email
+    unique: true, // Keep this, useful for lookups, ensure consistency with Firebase
     lowercase: true
   },
-  password: {
-    type: String,
-    required: true
-  },
+  // --- PASSWORD REMOVED ---
   createdAt: {
     type: Date,
     default: Date.now

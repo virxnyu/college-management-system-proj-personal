@@ -7,7 +7,7 @@
     align-items: center;
     background-color: var(--background-primary);
     padding: 2rem;
-    position: relative;
+    position: relative; /* Needed for pseudo-element positioning */
     overflow: hidden;
 }
 
@@ -21,6 +21,7 @@
     height: 200%;
     background: radial-gradient(circle, rgba(49, 130, 206, 0.1), transparent 40%);
     animation: rotateBackground 20s linear infinite;
+    z-index: -1; /* --- FIX: Force background behind everything --- */
 }
 
 @keyframes rotateBackground {
@@ -28,59 +29,106 @@
     to { transform: rotate(360deg); }
 }
 
+/* --- Ensure this targets the class used in RegisterPage.jsx --- */
 .auth-form-container {
     width: 100%;
-    max-width: 400px;
-    background-color: rgba(30, 30, 30, 0.7);
+    max-width: 420px;
+    background-color: rgba(30, 30, 30, 0.75);
     backdrop-filter: blur(15px);
-    padding: 3rem;
+    padding: 2.5rem 3rem;
     border-radius: 16px;
     border: 1px solid var(--background-tertiary);
-    z-index: 1;
     animation: fadeIn 0.5s ease-in-out;
+    /* --- FIX: Ensure this container is layered on top --- */
+    position: relative; /* Ensure z-index context */
+    z-index: 10;
 }
 
 .auth-form-container h2 {
     text-align: center;
     font-size: 2rem;
+    font-weight: 700;
     color: var(--text-white);
     margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+.auth-form-container p { /* Style the subtitle paragraph */
+    text-align: center;
+    color: var(--text-secondary);
     margin-bottom: 2rem;
+    font-size: 1rem;
 }
 
-.form-group {
-    margin-bottom: 1.5rem;
+.input-group {
+    margin-bottom: 1.25rem;
 }
 
-.form-group input,
-.form-group select {
-    /* Styles are inherited from index.css, no need to repeat */
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    /* Inherits styles from index.css */
 }
 
 .auth-button {
     width: 100%;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
+    padding: 14px;
 }
 
-.auth-message {
+/* Renamed message class to match Login page if needed */
+.message {
     text-align: center;
     margin-top: 1.5rem;
     font-weight: 500;
+    padding: 10px;
+    border-radius: 6px;
 }
-.auth-message.success { color: var(--accent-success); }
-.auth-message.error { color: var(--accent-danger); }
+.message.success {
+    color: var(--accent-success);
+    background-color: rgba(56, 161, 105, 0.1);
+    border: 1px solid rgba(56, 161, 105, 0.2);
+}
+.message.error {
+    color: var(--accent-danger);
+    background-color: rgba(229, 62, 62, 0.1);
+    border: 1px solid rgba(229, 62, 62, 0.2);
+}
 
-.switch-auth-link {
+/* Specific error message class used in RegisterPage */
+.error-message {
+    color: var(--accent-danger);
+    background-color: rgba(229, 62, 62, 0.1);
+    border: 1px solid rgba(229, 62, 62, 0.2);
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    margin-bottom: 1rem; /* Add margin below error */
+    margin-top: 1rem; /* Add margin above error */
+}
+
+
+/* Renamed link class to match Login page */
+.switch-auth {
     text-align: center;
     margin-top: 2rem;
     color: var(--text-secondary);
+    font-size: 0.9rem;
 }
 
-.switch-auth-link a {
+.switch-auth a {
     font-weight: 600;
     color: var(--accent-primary);
     text-decoration: none;
 }
-.switch-auth-link a:hover {
+.switch-auth a:hover {
     text-decoration: underline;
 }

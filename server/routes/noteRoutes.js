@@ -1,45 +1,38 @@
-const express = require('express');
-const router = express.Router();
+    const express = require('express');
+    const router = express.Router();
+    const noteController = require('../controllers/noteController');
+    const verifyFirebaseToken = require('../middleware/verifyFirebaseToken');
+    const requireRole = require('../middleware/roleMiddleware'); // Assuming this is the correct name
+    const { uploadNote } = require('../middleware/uploadMiddleware'); // Keep this import for now
 
-// Import controller functions
-const {
-    uploadNote,
-    getNotesBySubject,
-    deleteNote
-} = require('../controllers/noteController');
+ 
 
-// Import middleware
-const verifyToken = require('../middleware/authMiddleware');
-const requireRole = require('../middleware/roleMiddleware');
-// Import the specific handler for note uploads
-const { uploadNote: noteUploadMiddleware } = require('../middleware/uploadMiddleware');
-
-// --- Teacher Routes ---
-
-// @route   POST /api/notes
-// @desc    Teacher uploads a new note for a subject
-// @access  Private (Teacher)
-// This route uses our specialized 'uploadNote' middleware to handle the file.
-router.post(
+    // --- Teacher Routes ---
+    router.post(
     '/',
-    verifyToken,
+    verifyFirebaseToken,
     requireRole('teacher'),
-    noteUploadMiddleware.single('noteFile'), // 'noteFile' is the key the frontend will use
-    uploadNote
+    // --- CHANGE THIS BACK ---
+    uploadNote.single('file'), // Use the Cloudinary uploader again
+    noteController.uploadNoteController
 );
 
-// @route   DELETE /api/notes/:noteId
-// @desc    Teacher deletes a note
-// @access  Private (Teacher)
-router.delete('/:noteId', verifyToken, requireRole('teacher'), deleteNote);
+    // --- Student & Teacher Routes ---
+    router.get(
+        '/subject/:subjectId',
+        verifyFirebaseToken, // Any logged-in user can view notes for their subjects
+        noteController.getNotesBySubject
+    );
+
+    // --- Teacher Route ---
+    router.delete(
+        '/:noteId',
+        verifyFirebaseToken,
+        requireRole('teacher'),
+        noteController.deleteNote
+    );
 
 
-// --- Shared Routes (Teacher & Student) ---
+    module.exports = router;
+    
 
-// @route   GET /api/notes/subject/:subjectId
-// @desc    Get all notes for a specific subject
-// @access  Private (Authenticated Users)
-router.get('/subject/:subjectId', verifyToken, getNotesBySubject);
-
-
-module.exports = router;

@@ -15,6 +15,8 @@ import MyAttendance from './pages/MyAttendance';
 import StudentAssignments from './pages/StudentAssignments';
 import ViewSubmissions from './pages/ViewSubmissions';
 import SubjectNotesPage from "./pages/SubjectNotesPage";
+import EnterMarksPage from './pages/EnterMarksPage'; // <-- ADD THIS
+import ViewMarksPage from './pages/ViewMarksPage';   // <-- ADD THIS
 import './index.css';
 
 function App() {
@@ -102,6 +104,25 @@ function App() {
                 </ProtectedRoute>
             } 
         />
+
+        <Route
+                    path="/enter-marks"
+                    element={
+                        <ProtectedRoute>
+                            <EnterMarksPage />
+                        </ProtectedRoute>
+                    }
+                />
+
+                {/* Student Route for Viewing Marks */}
+                <Route
+                    path="/subject/:subjectId/marks"
+                    element={
+                        <ProtectedRoute>
+                            <ViewMarksPage />
+                        </ProtectedRoute>
+                    }
+                />
 
       </Routes>
     </Router>
