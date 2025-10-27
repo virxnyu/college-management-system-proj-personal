@@ -19,6 +19,7 @@ coverage/
 # Environment variables
 .env
 .env.*.local
+server/config/serviceAccountKey.json
 
 # IDE & System files
 .DS_Store
