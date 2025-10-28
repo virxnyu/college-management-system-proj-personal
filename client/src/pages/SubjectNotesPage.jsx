@@ -22,11 +22,17 @@ const SubjectNotesPage = () => {
         const fetchNotesAndSubject = async () => {
             setLoading(true);
             try {
-                const [notesRes, subjectRes] = await Promise.all([
-                    axios.get(`/notes/subject/${subjectId}`),
-                    axios.get(`/subjects/${subjectId}`)
-                ]);
-                setNotes(notesRes.data);
+                // const notesRes=null;
+                // const [subjectRes] = await Promise.all([
+                    
+                //     // axios.get(`/notes/subject/${subjectId}`),
+                //     axios.get(`/subjects/${subjectId}`)
+                // ]);
+                const subjectRes = await axios.get(`/subjects/${subjectId}`);
+                const notesRes = await axios.get(`/notes/subject/${subjectId}`);
+                console.log("hello");
+                console.log(notesRes);
+                // setNotes(notesRes.data);
                 setSubject(subjectRes.data);
             } catch (err) {
                 setError("Failed to load notes for this subject.");
@@ -37,7 +43,7 @@ const SubjectNotesPage = () => {
         };
 
         fetchNotesAndSubject();
-    }, [subjectId]);
+    }, []);
 
     if (loading) return <div className="loading-container"><p>Loading Notes...</p></div>;
     if (error) return <p className="error-message">{error}</p>;

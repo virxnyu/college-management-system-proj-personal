@@ -6,7 +6,9 @@ const {
     // getAttendanceGrid, // Removed - Part of old command center
     bulkUpdateAttendance,
     getAtRiskStudents,
-    getTeacherAttendanceReport // Keep the comprehensive report function
+    getTeacherAttendanceReport,
+    getStudentAttendanceStats,
+    getConsecutiveAbsences
 } = require("../controllers/attendanceController");
 
 // --- USE THE NEW FIREBASE MIDDLEWARE ---
@@ -25,6 +27,7 @@ router.post("/bulk-update", verifyFirebaseToken, requireRole("teacher"), bulkUpd
 
 // At-risk route remains the same, just uses new middleware
 router.get("/at-risk", verifyFirebaseToken, requireRole("teacher"), getAtRiskStudents); // Use new middleware
+router.get("/teacher/consecutive-absences", verifyFirebaseToken, requireRole("teacher"), getConsecutiveAbsences);
 
 
 // --- STUDENT ROUTES ---
@@ -77,6 +80,8 @@ router.get("/student", verifyFirebaseToken, requireRole("student"), async (req, 
 
 // Subject details route remains the same, just uses new middleware
 router.get("/student/subject/:subjectId", verifyFirebaseToken, requireRole("student"), getStudentSubjectDetails); // Use new middleware
+
+router.get("/student/stats/:subjectId", verifyFirebaseToken, requireRole("student"), getStudentAttendanceStats);
 
 
 module.exports = router;

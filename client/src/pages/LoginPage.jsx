@@ -38,6 +38,10 @@ function LoginPage() {
                  headers: { Authorization: `Bearer ${idToken}` } // Send Firebase token
             });
 
+            // const mongoIdResponse = await axios.get('users/get-mongoid', {
+            //     headers: {Authorization: `Bearer ${idToken}` }
+            // });
+
             const userRole = roleResponse.data.role; // Assuming backend sends { role: 'student' } etc.
             console.log("Received role from backend:", userRole);
 
@@ -54,6 +58,7 @@ function LoginPage() {
             // Storing the role helps the frontend know which dashboard components to render
             // Note: Security still relies on backend middleware checking the token/role
             localStorage.setItem('userRole', userRole); // Store role locally
+            // localStorage.setItem("mongo_id", mongoId);
 
             // --- Step 5: Navigate to Dashboard ---
             setMessage("Login successful!");

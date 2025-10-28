@@ -36,8 +36,9 @@ const noteRoutes = require('./routes/noteRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const userRoutes = require('./routes/userRoutes'); // Keep user routes
 // const todoRoutes = require('./routes/todoRoutes'); // Keep if you still use the todo feature
-const examRoutes = require('./routes/examRoutes'); // <-- ADD THIS
-const gradeRoutes = require('./routes/gradeRoutes'); // <-- ADD THIS
+const examRoutes = require('./routes/examRoutes'); 
+const gradeRoutes = require('./routes/gradeRoutes'); 
+const announcementRoutes = require('./routes/announcementRoutes'); 
 
 // --- Use Routes ---
 // Removed app.use for authRoutes
@@ -50,8 +51,10 @@ app.use('/api/notes', noteRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/users', userRoutes); // Use the new user routes for register-details and get-role
 // app.use('/api/todos', todoRoutes); // Keep if you still use the todo feature
-app.use('/api/exams', examRoutes); // <-- ADD THIS
-app.use('/api/grades', gradeRoutes); // <-- ADD THIS
+app.use('/api/exams', examRoutes);
+app.use('/api/grades', gradeRoutes); 
+app.use('/api/announcements', announcementRoutes); 
+
 
 
 

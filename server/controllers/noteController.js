@@ -5,25 +5,44 @@ const Teacher = require('../models/Teacher'); // Needed to find teacher for vali
 const Notification = require('../models/Notification'); // Needed for notifications
 const mongoose = require('mongoose');
 
-// @desc    Teacher uploads a new note for a subject
-// @route   POST /api/notes
-// @access  Private (Teacher)
+// Helper function to get Teacher's MongoDB ID from Firebase UID (ensure it's defined or imported)
+const getTeacherMongoId = async (firebaseUid) => {
+    if (!firebaseUid) return null;
+    const teacher = await Teacher.findOne({ firebaseUid: firebaseUid }).select('_id');
+    return teacher ? teacher._id : null;
+};
+
+// Helper function to get Student's MongoDB ID from Firebase UID (ensure it's defined or imported)
+const getStudentMongoId = async (firebaseUid) => {
+    if (!firebaseUid) return null;
+    const student = await Student.findOne({ firebaseUid: firebaseUid }).select('_id');
+    return student ? student._id : null;
+};
+
+
+// @desc     Teacher uploads a new note for a subject
+// @route    POST /api/notes
+// @access   Private (Teacher)
 exports.uploadNoteController = async (req, res) => {
     try {
-        console.log("✅ [NOTE UPLOAD 1/5] Received request to upload note.");
+        console.log("✅ [NOTE UPLOAD 1/6] Received request to upload note.");
         const { title, subjectId, description } = req.body;
-        const teacherFirebaseUid = req.user.uid; // From verifyFirebaseToken
+        const teacherFirebaseUid = req.user.uid;
 
-        // --- Basic Validation ---
         if (!title || !subjectId || !req.file) {
-             console.error("❌ [NOTE UPLOAD FAIL] Missing title, subjectId, or file.");
+            console.error("❌ [NOTE UPLOAD FAIL] Missing title, subjectId, or file.");
             return res.status(400).json({ message: 'Title, Subject ID, and File are required.' });
         }
-        console.log("✅ [NOTE UPLOAD 2/5] Basic fields validated.");
+        console.log("✅ [NOTE UPLOAD 2/6] Basic fields validated.");
+        console.log("Uploaded file details:", {
+             path: req.file.path,
+             mimetype: req.file.mimetype,
+             originalname: req.file.originalname,
+             size: req.file.size
+        });
 
-        // --- Verify Teacher Ownership of Subject ---
-        const teacher = await Teacher.findOne({ firebaseUid: teacherFirebaseUid });
-        if (!teacher) {
+        const teacherMongoId = await getTeacherMongoId(teacherFirebaseUid);
+        if (!teacherMongoId) {
             console.error(`❌ [NOTE UPLOAD FAIL] Teacher not found in DB for UID: ${teacherFirebaseUid}`);
             return res.status(403).json({ message: 'Teacher profile not found.' });
         }
@@ -32,104 +51,145 @@ exports.uploadNoteController = async (req, res) => {
             console.error(`❌ [NOTE UPLOAD FAIL] Subject not found for ID: ${subjectId}`);
             return res.status(404).json({ message: 'Subject not found.' });
         }
-        if (subject.teacher.toString() !== teacher._id.toString()) {
-            console.error(`❌ [NOTE UPLOAD FAIL] Teacher ${teacher._id} does not own subject ${subjectId}`);
+        if (subject.teacher.toString() !== teacherMongoId.toString()) {
+            console.error(`❌ [NOTE UPLOAD FAIL] Teacher ${teacherMongoId} does not own subject ${subjectId}`);
             return res.status(403).json({ message: 'You are not authorized to upload notes for this subject.' });
         }
-        console.log("✅ [NOTE UPLOAD 3/5] Teacher authorization confirmed.");
+        console.log("✅ [NOTE UPLOAD 3/6] Teacher authorization confirmed.");
 
-        // --- Create and Save Note ---
         const newNote = new Note({
             title,
             subject: subjectId,
-            teacher: teacher._id, // Store MongoDB ID of the teacher
+            teacher: teacherMongoId,
             description: description || '',
-            fileUrl: req.file.path // Get the Cloudinary URL from multer middleware
+            fileUrl: req.file.path,
+            fileType: req.file.mimetype || 'application/octet-stream'
         });
+        console.log("✅ [NOTE UPLOAD 4/6] Note object created, attempting save...");
         await newNote.save();
-        console.log("✅ [NOTE UPLOAD 4/5] Note saved successfully to DB.");
+        console.log("✅ [NOTE UPLOAD 5/6] Note saved successfully to DB.");
 
-        // --- Create Notifications for Enrolled Students ---
         if (subject.students && subject.students.length > 0) {
             const notifications = subject.students.map(studentId => ({
-                recipient: studentId, // Store MongoDB ID of student
+                recipient: studentId,
                 recipientModel: 'Student',
                 message: `New note "${title}" uploaded for "${subject.name}".`,
-                link: `/subject/${subjectId}/notes` // Link to the notes page for this subject
+                link: `/subject/${subjectId}/notes`
             }));
             await Notification.insertMany(notifications);
-            console.log(`✅ [NOTE UPLOAD 5/5] Created ${notifications.length} notifications for students.`);
+            console.log(`✅ [NOTE UPLOAD 6/6] Created ${notifications.length} notifications for students.`);
         } else {
-             console.log("✅ [NOTE UPLOAD 5/5] No students enrolled in this subject, skipping notifications.");
+             console.log("✅ [NOTE UPLOAD 6/6] No students enrolled in this subject, skipping notifications.");
         }
-
 
         res.status(201).json({ message: 'Note uploaded successfully.', note: newNote });
 
     } catch (error) {
-        // --- IMPROVED ERROR LOGGING ---
         console.error("--- ❌ ERROR in uploadNoteController ---");
-        // Log the full error object, including stack trace
-        console.error("Error Object:", error); 
-        // Log specific properties if available
-        if (error.message) console.error("Error Message:", error.message);
-        if (error.stack) console.error("Error Stack:", error.stack);
-        // --- END IMPROVED LOGGING ---
-        
-        // Send generic error response
-        res.status(500).json({ message: 'Server error during note upload.' });
+        console.error("Error Name:", error.name);
+        console.error("Error Message:", error.message);
+        if (error.name === 'ValidationError') {
+             console.error("Validation Errors:", JSON.stringify(error.errors, null, 2));
+             const messages = Object.values(error.errors).map(val => val.message);
+             const errorMessage = `Validation Failed: ${messages.join('. ')}`;
+             return res.status(400).json({ message: errorMessage });
+        }
+        if (error.http_code) {
+             console.error("Cloudinary HTTP Code:", error.http_code);
+        }
+         if (error.storageErrors && error.storageErrors.length > 0) {
+             console.error("Multer/Cloudinary Storage Errors:", JSON.stringify(error.storageErrors, null, 2));
+         }
+        console.error("Full Error Object:", error);
+        console.error("Error Stack:", error.stack);
+        res.status(500).json({ message: `Server error during note upload: ${error.message || 'Unknown error'}` });
     }
 };
 
 
-// @desc    Get all notes for a specific subject
-// @route   GET /api/notes/subject/:subjectId
-// @access  Private (Student, Teacher)
+// @desc     Get all notes for a specific subject
+// @route    GET /api/notes/subject/:subjectId
+// @access   Private (Student, Teacher)
 exports.getNotesBySubject = async (req, res) => {
     try {
+        console.log(req);
         const { subjectId } = req.params;
         const userFirebaseUid = req.user.uid;
         const userRole = req.user.role; // Assuming roleMiddleware adds this
-        const userMongoId = req.user.mongoId; // Assuming roleMiddleware adds this
+        const userMongoId = req.user.mongoId; // Assuming roleMiddleware adds this (ObjectId)
+        console.log("hello viranyu");
+        // --- Add Debug Logs ---
+        console.log(`[getNotesBySubject] Checking access for user role: ${userRole}, userMongoId: ${userMongoId}, subjectId: ${subjectId}`);
+        // --- End Debug Logs ---
 
-        // Validate Subject ID format
         if (!mongoose.Types.ObjectId.isValid(subjectId)) {
             return res.status(400).json({ message: 'Invalid Subject ID format.' });
         }
+        if (!userMongoId) { // Check if mongoId was actually found/attached by roleMiddleware
+             console.error(`[getNotesBySubject] userMongoId is missing for user UID: ${userFirebaseUid}`);
+             return res.status(404).json({ message: 'User profile mapping not found.' });
+        }
+
 
         const subject = await Subject.findById(subjectId);
         if (!subject) {
+            console.log(`[getNotesBySubject] Subject not found: ${subjectId}`);
             return res.status(404).json({ message: 'Subject not found.' });
         }
 
+        // --- Log subject details for debugging ---
+        console.log(`[getNotesBySubject] Subject Teacher ID: ${subject.teacher}, Enrolled Student IDs: ${subject.students}`);
+        // --- End Debug Logs ---
+
+
         // Authorization check: User must be the teacher OR enrolled in the subject
         let isAuthorized = false;
-        if (userRole === 'teacher' && subject.teacher.toString() === userMongoId) {
+        const userMongoIdString = userMongoId.toString(); // Convert user's ID to string once
+
+        if (userRole === 'teacher' && subject.teacher.toString() === userMongoIdString) {
+             console.log(`[getNotesBySubject] Access granted: User is the teacher.`);
             isAuthorized = true;
-        } else if (userRole === 'student' && subject.students.map(id => id.toString()).includes(userMongoId)) {
-            isAuthorized = true;
+        } else if (userRole === 'student') {
+             // Convert the array of ObjectIds to an array of strings for comparison
+            const enrolledStudentIdStrings = subject.students.map(id => id.toString());
+             console.log(`[getNotesBySubject] Checking if student ${userMongoIdString} is in ${enrolledStudentIdStrings}`);
+             // --- CORRECTED COMPARISON ---
+            if (enrolledStudentIdStrings.includes(userMongoIdString)) {
+                console.log(`[getNotesBySubject] Access granted: User is an enrolled student.`);
+                isAuthorized = true;
+            }
+             // --- END CORRECTION ---
+             else {
+                 console.log(`[getNotesBySubject] Access DENIED: Student ${userMongoIdString} not found in subject's student list.`);
+             }
+        } else {
+             console.log(`[getNotesBySubject] Access DENIED: User role '${userRole}' is not teacher or student.`);
         }
 
+
         if (!isAuthorized) {
+            console.log(`[getNotesBySubject] Final decision: Not Authorized.`);
             return res.status(403).json({ message: 'You are not authorized to view notes for this subject.' });
         }
 
+        console.log(`[getNotesBySubject] Fetching notes...`);
         const notes = await Note.find({ subject: subjectId })
-            .populate('teacher', 'name') // Populate teacher's name
-            .sort({ createdAt: -1 }); // Show newest notes first
+            .populate('teacher', 'name')
+            .sort({ createdAt: -1 });
 
+        console.log(`[getNotesBySubject] Found ${notes.length} notes. Sending response.`);
         res.status(200).json(notes);
 
     } catch (error) {
-        console.error("Error fetching notes by subject:", error);
+        console.error("--- ❌ ERROR in getNotesBySubject ---:", error);
         res.status(500).json({ message: 'Server error while fetching notes.' });
     }
 };
 
 
-// @desc    Teacher deletes a note
-// @route   DELETE /api/notes/:noteId
-// @access  Private (Teacher)
+// @desc     Teacher deletes a note
+// @route    DELETE /api/notes/:noteId
+// @access   Private (Teacher)
 exports.deleteNote = async (req, res) => {
     try {
         const { noteId } = req.params;
@@ -139,25 +199,20 @@ exports.deleteNote = async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(noteId)) {
             return res.status(400).json({ message: 'Invalid Note ID format.' });
         }
+         if (!teacherMongoId) { // Check if mongoId was actually found/attached
+             console.error(`[deleteNote] teacherMongoId is missing for user UID: ${teacherFirebaseUid}`);
+             return res.status(404).json({ message: 'Teacher profile mapping not found.' });
+         }
 
         const note = await Note.findById(noteId);
         if (!note) {
             return res.status(404).json({ message: 'Note not found.' });
         }
 
-        // Authorization: Ensure the logged-in teacher owns this note
-        if (note.teacher.toString() !== teacherMongoId) {
+        // Authorization: Ensure the logged-in teacher owns this note (compare strings)
+        if (note.teacher.toString() !== teacherMongoId.toString()) {
             return res.status(403).json({ message: 'You are not authorized to delete this note.' });
         }
-
-        // TODO: Optionally delete the file from Cloudinary here
-        // This requires parsing the file public_id from note.fileUrl
-        // and using the Cloudinary Admin API. For now, we just delete the DB record.
-        // Example (needs cloudinary setup):
-        // const publicId = extractPublicIdFromUrl(note.fileUrl);
-        // if (publicId) {
-        //    await cloudinary.uploader.destroy(publicId, { resource_type: 'auto' });
-        // }
 
         await Note.findByIdAndDelete(noteId);
 

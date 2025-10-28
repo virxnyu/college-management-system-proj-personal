@@ -54,20 +54,25 @@ const AttendanceCard = ({ subjectData }) => {
                     </p>
                 )}
                  {total === 0 && ( // Message for subjects with no attendance marked yet
-                     <p className="no-attendance-yet">No attendance marked yet.</p>
+                    <p className="no-attendance-yet">No attendance marked yet.</p>
                  )}
             </div>
             <div className="card-footer">
                 <div className="footer-buttons">
                     <Link to={`/my-attendance/${subjectData.subjectId}`} className="details-link">
-                        View Details
+                        View Attendance {/* Changed from View Details */}
                     </Link>
                     <Link to={`/subject/${subjectData.subjectId}/notes`} className="notes-link">
                         View Notes
                     </Link>
-                    <Link to={`/subject/${subjectData.subjectId}/marks`} className="marks-link"> {/* Add CSS for marks-link if desired */}
+                    <Link to={`/subject/${subjectData.subjectId}/marks`} className="marks-link">
                         View Marks
                     </Link>
+                    {/* --- ADDED: View Announcements Button --- */}
+                    <Link to={`/subject/${subjectData.subjectId}/announcements`} className="announcement-link">
+                        View Announcements
+                    </Link>
+                    {/* --- END ADDED --- */}
                 </div>
             </div>
         </div>
@@ -127,13 +132,17 @@ const StudentDashboard = () => {
                 subtitle="Your subjects, attendance, assignments, and notes."
             />
 
-             {error && <p className="dashboard-error">{error}</p>}
+             {error && <p className="dashboard-error message error">{error}</p>}
 
             {/* --- Action Bar for Enroll & Search --- */}
             <div className="dashboard-actions">
-                {/* --- 2. INTEGRATE THE SEARCH COMPONENT --- */}
                 <SubjectSearch />
                 <EnrollSubject onEnroll={fetchData} /> {/* Refresh data after enrollment */}
+                {/* --- ADDED: Link to general Assignments page --- */}
+                <Link to="/my-assignments" className="dashboard-link">
+                    📚 View My Assignments
+                </Link>
+                {/* --- END ADDED --- */}
             </div>
             {/* --- End Action Bar --- */}
 

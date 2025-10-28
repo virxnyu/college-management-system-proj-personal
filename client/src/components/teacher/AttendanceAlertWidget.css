@@ -1,0 +1,131 @@
+    /* client/src/components/teacher/AttendanceAlertWidget.css */
+
+    .attendance-alert-widget {
+        /* Inherits card styles */
+        border-left: 5px solid var(--accent-warning); /* Add a warning indicator */
+    }
+
+    .widget-title {
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+        font-size: 1.25rem;
+        color: var(--text-white);
+        border-bottom: 1px solid var(--background-tertiary);
+        padding-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .widget-title span[role="img"] {
+        font-size: 1.5rem; /* Larger icon */
+        color: var(--accent-warning);
+    }
+
+    .loading-message,
+    .no-alerts-message {
+        text-align: center;
+        color: var(--text-secondary);
+        padding: 1rem 0;
+        font-style: italic;
+    }
+
+    /* Inherit message.error styles */
+    .message.error {
+        color: var(--accent-danger);
+        background-color: rgba(229, 62, 62, 0.1);
+        border: 1px solid rgba(229, 62, 62, 0.2);
+        padding: 10px;
+        border-radius: 6px;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+
+    .alert-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        max-height: 400px; /* Limit height and make scrollable */
+        overflow-y: auto;
+        padding-right: 5px; /* Space for scrollbar */
+    }
+
+    /* Style the scrollbar for webkit browsers */
+    .alert-list::-webkit-scrollbar {
+        width: 6px;
+    }
+    .alert-list::-webkit-scrollbar-track {
+        background: var(--background-primary);
+        border-radius: 6px;
+    }
+    .alert-list::-webkit-scrollbar-thumb {
+        background: var(--background-tertiary);
+        border-radius: 6px;
+    }
+    .alert-list::-webkit-scrollbar-thumb:hover {
+        background: var(--background-interactive);
+    }
+
+    .alert-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        background-color: rgba(255, 193, 7, 0.08); /* Subtle warning background */
+        border: 1px solid rgba(255, 193, 7, 0.15);
+        border-radius: 8px;
+        flex-wrap: wrap; /* Allow wrapping */
+        gap: 0.5rem;
+    }
+
+    .alert-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+        flex-grow: 1; /* Take available space */
+    }
+
+    .alert-info .student-name {
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .alert-info .subject-name {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+    }
+
+    .alert-details {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end; /* Align details to the right */
+        gap: 0.1rem;
+        flex-shrink: 0; /* Prevent shrinking */
+        text-align: right;
+    }
+
+    .alert-details .absence-count {
+        font-weight: 600;
+        color: var(--accent-warning);
+    }
+
+    .alert-details .last-absent {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+    }
+
+    /* Optional styles for a details link */
+    .details-link-alert {
+        font-size: 0.8rem;
+        color: var(--accent-primary);
+        text-decoration: none;
+        margin-top: 2px;
+    }
+    .details-link-alert:hover {
+        text-decoration: underline;
+    }
+    

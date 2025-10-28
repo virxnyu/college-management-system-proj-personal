@@ -55,7 +55,7 @@ const LandingPage = () => {
             </main>
 
             <footer className="landing-footer">
-                <p> Made with ❤️ by Viranyu Srinivasan</p>
+                <p> Made with ❤️ by Viranyu, Aaditya and Hrishav</p>
             </footer>
         </div>
     );

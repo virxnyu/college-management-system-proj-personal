@@ -9,22 +9,22 @@
 }
 
 .loading-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-    font-size: 1.2rem;
-    color: var(--text-secondary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  font-size: 1.2rem;
+  color: var(--text-secondary);
 }
 
 /* --- Action Bar (for buttons) --- */
 .dashboard-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2.5rem;
-    flex-wrap: wrap;
-    gap: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 /* --- Responsive Grid for Cards --- */
@@ -104,15 +104,15 @@
 }
 
 .safe-to-miss-inline {
-    text-align: center;
-    margin-top: 12px;
-    padding: 8px;
-    background-color: rgba(255, 193, 7, 0.1);
-    border: 1px solid rgba(255, 193, 7, 0.2);
-    border-radius: 8px;
-    color: var(--accent-warning);
-    font-size: 0.85rem;
-    font-weight: 500;
+  text-align: center;
+  margin-top: 12px;
+  padding: 8px;
+  background-color: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.2);
+  border-radius: 8px;
+  color: var(--accent-warning);
+  font-size: 0.85rem;
+  font-weight: 500;
 }
 
 .card-footer {
@@ -120,104 +120,147 @@
   margin-top: auto;
 }
 
+/* --- FIX: Button Layout & Sizing --- */
 .footer-buttons {
-    display: flex;
-    gap: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: space-between;
 }
 
+.footer-buttons a {
+  flex: 1 1 calc(50% - 0.75rem / 2);
+  text-decoration: none;
+  padding: 12px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: center;
+  transition: background-color 0.2s;
+  box-sizing: border-box;
+}
+
+/* --- Button Specific Styles --- */
 .details-link {
-    flex-grow: 1;
-    text-decoration: none;
-    background-color: var(--accent-primary);
-    color: white;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    text-align: center;
-    transition: background-color 0.2s;
+  background-color: var(--accent-primary);
+  color: white;
 }
 .details-link:hover {
-    background-color: var(--accent-primary-hover);
+  background-color: var(--accent-primary-hover);
 }
 
 .notes-link {
-    flex-grow: 1;
-    text-decoration: none;
-    background-color: var(--background-tertiary);
-    color: var(--text-primary);
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    text-align: center;
-    transition: background-color 0.2s;
+  background-color: var(--background-tertiary);
+  color: var(--text-primary);
 }
 .notes-link:hover {
-    background-color: var(--background-interactive);
+  background-color: var(--background-interactive);
+}
+
+.marks-link {
+  background-color: #006400; /* Dark Green */
+  color: white;
+}
+.marks-link:hover {
+  background-color: #004d00; /* Slightly darker shade */
+}
+
+.announcements-link {
+  background-color: var(--accent-info);
+  color: white;
+}
+.announcements-link:hover {
+  background-color: var(--accent-info-hover);
+  opacity: 0.9;
 }
 
 /* --- Message for No Records --- */
 .no-records-message {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 3rem;
-    background-color: var(--background-secondary);
-    border: 1px dashed var(--background-tertiary);
-    border-radius: 12px;
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+  background-color: var(--background-secondary);
+  border: 1px dashed var(--background-tertiary);
+  border-radius: 12px;
 }
 
 /* --- MOBILE RESPONSIVENESS --- */
 @media (max-width: 768px) {
-    .student-dashboard-container {
-        padding: 0 1rem 1rem 1rem;
-    }
+  .student-dashboard-container {
+    padding: 0 1rem 1rem 1rem;
+  }
 
-    .dashboard-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
+  .dashboard-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-    .dashboard-actions .dashboard-link {
-        text-align: center;
-    }
+  .dashboard-actions .dashboard-link {
+    text-align: center;
+  }
 
-    .cards-grid {
-        gap: 1.5rem;
-    }
+  .cards-grid {
+    gap: 1.5rem;
+  }
 }
 
-/* Add this to the end of StudentDashboard.css */
-
+/* --- Action Bar Overrides --- */
 .dashboard-actions {
-    display: flex; /* Changed to flex */
-    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
-    justify-content: space-between; /* Space out items */
-    align-items: flex-start; /* Align items to the top */
-    gap: 2rem; /* Add gap between items */
-    margin-bottom: 2.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 /* Make search and enroll take appropriate space */
-.dashboard-actions > div:first-child { /* Target SubjectSearch */
-    flex: 2; /* Allow search to take more space */
-    min-width: 300px; /* Minimum width for search */
+.dashboard-actions > div:first-child {
+  flex: 2;
+  min-width: 300px;
 }
-.dashboard-actions > div:last-child { /* Target EnrollSubject */
-     flex: 1;
-     min-width: 250px; /* Minimum width for enroll */
+.dashboard-actions > div:last-child {
+  flex: 1;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-/* Ensure full width message spans grid */
+/* --- NEW FIX: Prevent overlap in Enroll section --- */
+.enroll-form {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adds space between dropdown and button */
+  flex-wrap: wrap; /* Ensures they wrap neatly on smaller screens */
+}
+
+.enroll-form select {
+  flex: 1; /* Makes dropdown take up available space */
+  min-width: 200px;
+}
+
+.enroll-form button {
+  flex-shrink: 0; /* Prevents button from shrinking too small */
+  padding: 8px 16px;
+}
+
+/* --- Remove default overlap styles --- */
+.dashboard-actions > div:last-child select {
+  width: 100%;
+  margin: 0;
+}
+
+/* Full width message */
 .full-width-message {
-    grid-column: 1 / -1; /* Make message span all columns if grid is active */
+  grid-column: 1 / -1;
 }
 
-/* Style for message when no attendance marked yet */
+/* Message when no attendance marked yet */
 .no-attendance-yet {
-    text-align: center;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    margin-top: 1rem;
-    font-style: italic;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 1rem;
+  font-style: italic;
 }

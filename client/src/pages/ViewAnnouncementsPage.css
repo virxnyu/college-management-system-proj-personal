@@ -1,0 +1,103 @@
+/* client/src/pages/ViewAnnouncementsPage.css */
+
+.announcements-page-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem 1rem;
+    font-family: var(--font-primary);
+}
+
+.ann-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.ann-header h2 {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.ann-header h1 {
+    color: var(--text-white);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0.5rem 0 0 0;
+}
+
+.announcements-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.ann-item {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    /* Inherits card styles */
+}
+
+.urgent-border {
+    border-left: 5px solid var(--accent-danger);
+    background-color: rgba(229, 62, 62, 0.05); /* Light red background */
+}
+
+.ann-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-white);
+    margin: 0 0 0.5rem 0;
+}
+
+.ann-content {
+    font-size: 1rem;
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.ann-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    border-top: 1px dashed var(--background-tertiary);
+    padding-top: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.urgent-badge {
+    background-color: var(--accent-danger);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.no-announcements-message {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-secondary);
+}
+
+/* Reused Classes */
+.card {
+    background-color: var(--background-secondary);
+    border: 1px solid var(--background-tertiary);
+    border-radius: 12px;
+}
+
+.message.error {
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 1rem;
+    color: var(--accent-danger);
+    background-color: rgba(229, 62, 62, 0.1);
+    border: 1px solid rgba(229, 62, 62, 0.2);
+    border-radius: 6px;
+    font-weight: 500;
+}
