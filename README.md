@@ -122,14 +122,3 @@ $or + $regex
 * Cloud File Storage
 * Data Consistency & Cascading Deletes
 * Search Indexing + Regex Matching
-
----
-
-If you want, I can also:
-
-✔ Add installation + setup instructions
-✔ Include database schema diagrams
-✔ Provide API documentation tables
-✔ Add screenshots and GIFs (properly sized for GitHub)
-
-Would you like me to **format and generate the remaining sections** (Setup, Folder Structure, Screenshots, Credits)?
