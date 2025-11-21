@@ -1,4 +1,4 @@
-# EduTrack — College Management System (MERN + Firebase)
+# EduTrack: College Management System (MERN + Firebase)
 
 EduTrack is a full-stack college management system showcasing DBMS concepts using the **MERN stack** (MongoDB, Express, React, Node.js), integrated with **Firebase Authentication** for secure user management and **Cloudinary** for file storage.
 
